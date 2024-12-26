@@ -7,9 +7,9 @@ function App() {
   const dispatch = useDispatch();
   const {data, isLoading, error} = useSelector((state)=> state.test)
   console.log('data is', data)
-  // useEffect(()=>{
-  //   dispatch(fetchTestData())
-  // },[])
+  useEffect(()=>{
+    dispatch(fetchTestData())
+  },[])
   return (
    <div className='mt-4'>
     <Button>Click me</Button>
