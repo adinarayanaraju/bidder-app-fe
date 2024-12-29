@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Axios instance
 const Axios = axios.create({
-  baseURL: process.env.REACT_PUBLIC_API_BASE_URL,
+  baseURL: process.env.REACT_PUBLIC_API_BASE_URL ,
   headers: {
     "Content-Type": "application/json",
   },
