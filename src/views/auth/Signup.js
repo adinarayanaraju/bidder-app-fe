@@ -173,7 +173,7 @@ export default function Signup() {
 
         {/* Details Section */}
         <div className="col-12 col-md-12 col-lg-6  details-section">
-          <AuthDetails />
+          <AuthDetails formType="signup"/>
         </div>
       </div>
     </div>

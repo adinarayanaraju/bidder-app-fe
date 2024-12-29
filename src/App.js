@@ -3,6 +3,7 @@ import "./style/global.scss";
 import { useEffect } from "react";
 import { fetchTestData } from "./redux/slices/testSlice";
 import Signup from "./views/auth/Signup";
+import Signin from "./views/auth/Signin";
 function App() {
   const dispatch = useDispatch();
   const { data, isLoading, error } = useSelector((state) => state.test);
@@ -13,6 +14,8 @@ function App() {
   return (
     <div>
       <Signup />
+      <Signin />
+
     </div>
   );
 }
