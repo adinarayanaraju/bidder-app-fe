@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function AuthDetails({ formType }) {
   const signUpText = `Create an account to dive into the world of auctions and unveil hidden
@@ -22,12 +23,12 @@ export default function AuthDetails({ formType }) {
         {formType === "signin" ? (
           <>
             <p>Don't have an account?</p>
-            <a href="">Signup here</a>
+            <Link to="/auth/signup">Signup here</Link>
           </>
         ) : (
           <>
             <p>Already have an account?</p>
-            <a href="">Signin here</a>
+            <Link to="/auth/signin">Signin here</Link>
           </>
         )}
       </div>
