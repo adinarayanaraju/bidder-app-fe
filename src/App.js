@@ -5,6 +5,7 @@ import { fetchTestData } from "./redux/slices/testSlice";
 import Signup from "./views/auth/Signup";
 import Signin from "./views/auth/Signin";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ForgotPassword from "./views/auth/ForgotPassword";
 function App() {
   const dispatch = useDispatch();
   const { data, isLoading, error } = useSelector((state) => state.test);
@@ -18,6 +19,9 @@ function App() {
         <Routes>
           <Route path="/auth/signup" element={<Signup />} />
           <Route path="/auth/signin" element={<Signin />} />
+          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+
+
         </Routes>
       </BrowserRouter>
     </>
