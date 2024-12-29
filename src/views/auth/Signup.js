@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Button, FormGroup, Label } from "reactstrap";
+import { Button, FormGroup, Label, Spinner } from "reactstrap";
 import { signUpSchema } from "../../utils/validationSchema";
 import "./auth.scss";
 import AuthDetails from "./AuthDetails";
 import eye from "../../assets/icons/eye.svg";
 import eyeHide from "../../assets/icons/eye_hide.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [isPasswordView, setIsPasswordView] = useState(false);
   const [isConfirmPasswordView, setIsConfirmPasswordView] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const { isLoading } = useSelector((state) => state.auth);
   const signupInitialValues = {
     first_name: "",
     last_name: "",
@@ -22,7 +24,7 @@ export default function Signup() {
     confirm_password: "",
   };
 
-  const handleFromSubmit = (values, { resetForm }) => {
+  const handleFromSubmit = async (values, { resetForm }) => {
     const payload = {
       first_name: values.first_name,
       last_name: values.last_name,
@@ -30,11 +32,14 @@ export default function Signup() {
       password: values.password,
       role_id: "3", // for normal user we pass this
     };
-    // Dispatch signup api
-    dispatch(signupUser(payload));
-    // setTimeout(() => {
-    //   resetForm();
-    // }, 4000);
+    try {
+      // Dispatch signup api
+      await dispatch(signupUser(payload)).unwrap();
+      resetForm();
+      navigate("/auth/signin");
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (
@@ -174,8 +179,12 @@ export default function Signup() {
                   </div>
                 </FormGroup>
                 {/* Submit Button */}
-                <Button type="submit" className="btn btn-primary">
-                  Submit
+                <Button
+                  type="submit"
+                  className="btn btn-primary custom-button "
+                  disabled={isLoading}
+                >
+                  {isLoading ? <Spinner /> : "Submit"}
                 </Button>
               </Form>
             )}
