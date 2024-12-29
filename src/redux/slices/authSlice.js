@@ -5,6 +5,7 @@ import { ERROR_MESSAGE } from "../../utils/propertyResolver";
 import { showToast } from "../../sharedComponents/toast/showTaost";
 
 const authInitialState = {
+  isUserLogin: false,
   isLoading: false,
   error: null,
 };
@@ -16,6 +17,27 @@ export const signupUser = createAsyncThunk(
     try {
       const response = await POST(API_END_POINT.CREATE_USER, userData);
       if (response?.status === 200) {
+        return response?.response?.data?.data;
+      } else {
+        showToast(response?.response?.data?.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error")
+        return thunkApi.rejectWithValue(response?.response?.data?.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG);
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error")
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
+//Async thunk for Signin user
+export const signinUser = createAsyncThunk(
+  "auth/signinUser",
+  async (userData, thunkApi) => {
+    try {
+      const response = await POST(API_END_POINT.LOGIN_USER, userData);
+      if (response?.status === 200) {
+        // showToast(response?.response?.data?.message , "success")
+        localStorage.setItem("token", response?.response?.data?.data)
         return response?.response?.data?.data;
       } else {
         showToast(response?.response?.data?.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error")
@@ -41,6 +63,17 @@ export const authSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(signupUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(signinUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(signinUser.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isUserLogin = true
+      })
+      .addCase(signinUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });
