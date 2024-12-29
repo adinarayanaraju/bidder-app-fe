@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Button, FormGroup, Label } from "reactstrap";
 import { signUpSchema } from "../../utils/validationSchema";
 import "./auth.scss";
 import AuthDetails from "./AuthDetails";
+import eye from "../../assets/icons/eye.svg";
+import eyeHide from "../../assets/icons/eye_hide.svg";
 
 export default function Signup() {
+  const [isPasswordView, setIsPasswordView] = useState(false);
+  const [isConfirmPasswordView, setIsConfirmPasswordView] = useState(false);
+
   const signupInitialValues = {
     first_name: "",
     last_name: "",
@@ -98,40 +103,64 @@ export default function Signup() {
                   <Label>
                     Password <span className="error">*</span>
                   </Label>
-                  <Field
-                    type="password"
-                    name="password"
-                    className={`form-control  custom-input-box ${
-                      touched.password && errors.password ? "is-invalid" : ""
-                    }`}
-                    placeholder="Enter Password"
-                  />
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="invalid-feedback"
-                  />
+                  <div className="password-input-container">
+                    <Field
+                      type={isPasswordView ? "text" : "password"}
+                      name="password"
+                      className={`form-control  custom-input-box ${
+                        touched.password && errors.password ? "is-invalid" : ""
+                      }`}
+                      placeholder="Enter Password"
+                    />
+                    <div
+                      className="eye-icon"
+                      onClick={() => setIsPasswordView(!isPasswordView)}
+                    >
+                      <img
+                        src={isPasswordView ? eye : eyeHide}
+                        alt="password hide"
+                      />
+                    </div>
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className="invalid-feedback"
+                    />
+                  </div>
                 </FormGroup>
                 {/* Confirm Password */}
                 <FormGroup>
                   <Label>
                     Confirm Password <span className="error">*</span>
                   </Label>
-                  <Field
-                    type="password"
-                    name="confirm_password"
-                    className={`form-control custom-input-box ${
-                      touched.confirm_password && errors.confirm_password
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    placeholder="Confirm Password"
-                  />
-                  <ErrorMessage
-                    name="confirm_password"
-                    component="div"
-                    className="invalid-feedback"
-                  />
+                  <div className="password-input-container">
+                    <Field
+                      type={isConfirmPasswordView ? "text" : "password"}
+                      name="confirm_password"
+                      className={`form-control custom-input-box ${
+                        touched.confirm_password && errors.confirm_password
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      placeholder="Confirm Password"
+                    />
+                    <div
+                      className="eye-icon"
+                      onClick={() =>
+                        setIsConfirmPasswordView(!isConfirmPasswordView)
+                      }
+                    >
+                      <img
+                        src={isConfirmPasswordView ? eye : eyeHide}
+                        alt="password hide"
+                      />
+                    </div>
+                    <ErrorMessage
+                      name="confirm_password"
+                      component="div"
+                      className="invalid-feedback"
+                    />
+                  </div>
                 </FormGroup>
                 {/* Submit Button */}
                 <Button type="submit" className="btn btn-primary">

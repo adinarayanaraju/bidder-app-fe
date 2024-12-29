@@ -21,6 +21,21 @@
           margin-bottom: 30px;
         }
       }
+      .password-input-container {
+        position: relative;
+        .eye-icon {
+          position: absolute;
+          cursor: pointer;
+          right: 40px;
+          top: 50%;
+          transform: translateY(-50%);
+          top: 25px;
+          img {
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
     }
   }
 }
