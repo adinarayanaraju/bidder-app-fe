@@ -88,7 +88,10 @@ export default function Signin() {
                 </FormGroup>
 
                 {/* Submit Button */}
-                <Button type="submit" className="btn btn-primary">
+                <Button
+                  type="submit"
+                  className="btn btn-primary custom-button "
+                >
                   Submit
                 </Button>
               </Form>

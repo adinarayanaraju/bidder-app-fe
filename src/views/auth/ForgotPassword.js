@@ -1,16 +1,13 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Button, FormGroup, Label } from "reactstrap";
-import {
-  forgotPasswordSchema
-} from "../../utils/validationSchema";
+import { forgotPasswordSchema } from "../../utils/validationSchema";
 import "./auth.scss";
 import AuthDetails from "./AuthDetails";
 
 export default function ForgotPassword() {
-
   const signupInitialValues = {
-    email: ""
+    email: "",
   };
 
   const handleFromSubmit = (values, { resetForm }) => {
@@ -56,7 +53,10 @@ export default function ForgotPassword() {
                 </FormGroup>
 
                 {/* Submit Button */}
-                <Button type="submit" className="btn btn-primary">
+                <Button
+                  type="submit"
+                  className="btn btn-primary custom-button "
+                >
                   Submit
                 </Button>
               </Form>
