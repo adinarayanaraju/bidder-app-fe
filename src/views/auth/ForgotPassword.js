@@ -1,20 +1,21 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Button, FormGroup, Label } from "reactstrap";
+import { Button, FormGroup, Label, Spinner } from "reactstrap";
 import { forgotPasswordSchema } from "../../utils/validationSchema";
 import "./auth.scss";
 import AuthDetails from "./AuthDetails";
+import { useDispatch, useSelector } from "react-redux";
+import { forgotPassword } from "../../redux/slices/authSlice";
 
 export default function ForgotPassword() {
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.auth);
   const signupInitialValues = {
     email: "",
   };
 
   const handleFromSubmit = (values, { resetForm }) => {
-    console.log("form values", values);
-    setTimeout(() => {
-      resetForm();
-    }, 4000);
+    dispatch(forgotPassword(values));
   };
 
   return (
@@ -56,8 +57,9 @@ export default function ForgotPassword() {
                 <Button
                   type="submit"
                   className="btn btn-primary custom-button "
+                  disabled={isLoading}
                 >
-                  Submit
+                  {isLoading ? <Spinner /> : "Submit"}
                 </Button>
               </Form>
             )}
