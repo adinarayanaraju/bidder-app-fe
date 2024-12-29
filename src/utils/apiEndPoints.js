@@ -1,3 +1,3 @@
 export const API_END_POINT = {
-    CREATE_USER : "/create"
+    CREATE_USER : "/auth/register"
 }

@@ -6,10 +6,13 @@ import "./auth.scss";
 import AuthDetails from "./AuthDetails";
 import eye from "../../assets/icons/eye.svg";
 import eyeHide from "../../assets/icons/eye_hide.svg";
+import { useDispatch } from "react-redux";
+import { signupUser } from "../../redux/slices/authSlice";
 
 export default function Signup() {
   const [isPasswordView, setIsPasswordView] = useState(false);
   const [isConfirmPasswordView, setIsConfirmPasswordView] = useState(false);
+  const dispatch = useDispatch();
 
   const signupInitialValues = {
     first_name: "",
@@ -20,10 +23,18 @@ export default function Signup() {
   };
 
   const handleFromSubmit = (values, { resetForm }) => {
-    console.log("form values", values);
-    setTimeout(() => {
-      resetForm();
-    }, 4000);
+    const payload = {
+      first_name: values.first_name,
+      last_name: values.last_name,
+      email: values.email,
+      password: values.password,
+      role_id: "3", // for normal user we pass this
+    };
+    // Dispatch signup api
+    dispatch(signupUser(payload));
+    // setTimeout(() => {
+    //   resetForm();
+    // }, 4000);
   };
 
   return (
@@ -173,7 +184,7 @@ export default function Signup() {
 
         {/* Details Section */}
         <div className="col-12 col-md-12 col-lg-6  details-section">
-          <AuthDetails formType="signup"/>
+          <AuthDetails formType="signup" />
         </div>
       </div>
     </div>

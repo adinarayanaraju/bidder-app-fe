@@ -1,7 +1,9 @@
-import {combineReducers} from 'redux'
-import  testSlice  from './slices/testSlice';
+import { combineReducers } from "redux";
+import testSlice from "./slices/testSlice";
+import authSlice from "./slices/authSlice";
 const rootReducer = combineReducers({
-    test: testSlice
+  test: testSlice,
+  auth: authSlice,
 });
 
-export default rootReducer
+export default rootReducer;
