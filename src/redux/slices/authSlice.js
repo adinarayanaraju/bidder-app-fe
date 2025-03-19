@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { POST } from "../../services/axiosRequestHandler";
+import { GET, POST } from "../../services/axiosRequestHandler";
 import { API_END_POINT } from "../../utils/apiEndPoints";
 import { ERROR_MESSAGE } from "../../utils/propertyResolver";
 import { showToast } from "../../sharedComponents/toast/showTaost";
@@ -8,6 +8,7 @@ const authInitialState = {
   isUserLogin: false,
   isLoading: false,
   error: null,
+  isAccountVerified: false
 };
 
 //Async thunk for Signup user
@@ -91,6 +92,32 @@ export const forgotPassword = createAsyncThunk(
   }
 );
 
+//Async thunk for verify account
+export const verifyAccount = createAsyncThunk(
+  "auth/verifyAccount",
+  async (params, thunkApi) => {
+    try {
+      const response = await GET(API_END_POINT.VERIFY_ACCOUNT, params);
+      if (response?.status === 200) {
+        return response?.response?.data?.data;
+      } else {
+        showToast(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+          "error"
+        );
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState: authInitialState,
@@ -127,6 +154,17 @@ export const authSlice = createSlice({
       .addCase(forgotPassword.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      }).addCase(verifyAccount.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(verifyAccount.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isAccountVerified = true;
+      })
+      .addCase(verifyAccount.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.isAccountVerified = false;
       });
   },
 });
