@@ -6,6 +6,7 @@ import Signup from "./views/auth/Signup";
 import Signin from "./views/auth/Signin";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ForgotPassword from "./views/auth/ForgotPassword";
+import VerifyAccount from "./views/auth/VerifyAccount";
 function App() {
   const dispatch = useDispatch();
   const { data, isLoading, error } = useSelector((state) => state.test);
@@ -20,6 +21,8 @@ function App() {
           <Route path="/auth/signup" element={<Signup />} />
           <Route path="/auth/signin" element={<Signin />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+          <Route path="/auth/verify-account/:token" element={<VerifyAccount />} />
+
 
 
         </Routes>
