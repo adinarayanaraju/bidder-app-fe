@@ -9,7 +9,7 @@ const persistConfig = {
   storage,
   transforms: [
     encryptTransform({
-      secretKey: process.env.ENCRYPT_KEY || "sadkkjsakskdkas",
+      secretKey: process.env.REACT_APP_ENCRYPT_KEY,
       onError: function (error) {
         console.log(`Encryption error:`, error)
       },

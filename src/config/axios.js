@@ -1,5 +1,5 @@
 import axios from "axios";
-
+console.log(process.env)
 // Axios instance
 const Axios = axios.create({
   baseURL: process.env.REACT_PUBLIC_API_BASE_URL || "http://localhost:3001/api/" ,
