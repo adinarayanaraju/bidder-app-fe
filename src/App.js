@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ForgotPassword from "./views/auth/ForgotPassword";
 import VerifyAccount from "./views/auth/VerifyAccount";
 import ResetPassword from "./views/auth/ResetPassword";
+import { routeConstants } from "./utils/routeConstant";
 function App() {
   const dispatch = useDispatch();
   const { data, isLoading, error } = useSelector((state) => state.test);
@@ -19,15 +20,20 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/auth/signup" element={<Signup />} />
-          <Route path="/auth/signin" element={<Signin />} />
-          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-          <Route path="/auth/verify-account/:token" element={<VerifyAccount />} />
-          <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
-
-
-
-
+          <Route path={routeConstants.SIGN_UP} element={<Signup />} />
+          <Route path={routeConstants.SIGN_IN} element={<Signin />} />
+          <Route
+            path={routeConstants.FORGOT_PASSWORD}
+            element={<ForgotPassword />}
+          />
+          <Route
+            path={routeConstants.VERIFY_ACCOUNT}
+            element={<VerifyAccount />}
+          />
+          <Route
+            path={routeConstants.RESET_PASSWORD}
+            element={<ResetPassword />}
+          />
         </Routes>
       </BrowserRouter>
     </>
