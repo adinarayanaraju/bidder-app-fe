@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updatePasswordSchema } from "../../utils/validationSchema";
 import { useNavigate, useParams } from "react-router-dom";
 import { resetPassword } from "../../redux/slices/authSlice";
+import { routeConstants } from "../../utils/routeConstant";
 
 export default function ResetPassword() {
   const dispatch = useDispatch();
@@ -27,9 +28,9 @@ export default function ResetPassword() {
         };
         await dispatch(resetPassword(payload)).unwrap();
         resetForm();
-        navigate("/auth/signin");
+        navigate(routeConstants.SIGN_IN);
       } else {
-        navigate("/auth/signin");
+        navigate(routeConstants.SIGN_IN);
       }
     } catch (error) {
       console.log("Error while update password", error);

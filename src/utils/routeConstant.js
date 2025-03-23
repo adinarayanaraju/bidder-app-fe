@@ -1,0 +1,10 @@
+import { modulePath } from "./moduleConstant";
+
+export const routeConstants = {
+  HOME_PAGE: "/",
+  SIGN_UP: `${modulePath.AUTH}/signup`,
+  SIGN_IN: `${modulePath.AUTH}/signin`,
+  FORGOT_PASSWORD: `${modulePath.AUTH}/forgot-password`,
+  RESET_PASSWORD: `${modulePath.AUTH}/reset-password/:token`,
+  VERIFY_ACCOUNT: `${modulePath.AUTH}/verify-account/:token`,
+};

@@ -9,6 +9,8 @@ import eyeHide from "../../assets/icons/eye_hide.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { routeConstants } from "../../utils/routeConstant";
+import { USER_ROLE } from "../../utils/propertyResolver";
 
 export default function Signup() {
   const [isPasswordView, setIsPasswordView] = useState(false);
@@ -30,13 +32,13 @@ export default function Signup() {
       last_name: values.last_name,
       email: values.email,
       password: values.password,
-      role_id: "3", // for normal user we pass this
+      role_id: USER_ROLE.USER, // for normal user we pass this
     };
     try {
       // Dispatch signup api
       await dispatch(signupUser(payload)).unwrap();
       resetForm();
-      navigate("/auth/signin");
+      navigate(routeConstants.SIGN_IN);
     } catch (error) {
       console.error(error.message);
     }

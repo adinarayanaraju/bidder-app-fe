@@ -1,12 +1,13 @@
-
-export const ERROR_MESSAGE= {
-    SOMETHING_WENT_WRONG: "Something went wrong"
-}
+export const ERROR_MESSAGE = {
+  SOMETHING_WENT_WRONG: "Something went wrong",
+};
 
 export const SUCCESS_MESSAGE = {
-    PASSWORD_UPDATED: "Password Updated Successfully"
-}
+  PASSWORD_UPDATED: "Password Updated Successfully",
+};
 
-export const CONSTANT_NAME = {
-    
-}
+export const CONSTANT_NAME = {};
+
+export const USER_ROLE = {
+  USER: 1,
+};

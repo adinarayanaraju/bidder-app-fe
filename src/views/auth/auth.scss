@@ -4,6 +4,7 @@
 .signup-wrapper {
   background-color: $background-grey;
   padding: 40px;
+  min-height: 100vh;
   .signup-card {
     border-radius: 20px;
     background: $white;

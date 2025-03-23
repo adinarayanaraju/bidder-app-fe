@@ -9,6 +9,7 @@ import eyeHide from "../../assets/icons/eye_hide.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { signinUser } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { routeConstants } from "../../utils/routeConstant";
 
 export default function Signin() {
   const [isPasswordView, setIsPasswordView] = useState(false);
@@ -31,7 +32,7 @@ export default function Signin() {
     try {
       await dispatch(signinUser(payload)).unwrap();
       resetForm();
-      navigate("/");
+      navigate(routeConstants.HOME_PAGE);
     } catch (error) {}
   };
 
