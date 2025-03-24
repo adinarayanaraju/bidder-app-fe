@@ -6,14 +6,17 @@ import hamBurgerIcon from "../../assets/icons/hamburger.svg";
 import notificationIcon from "../../assets/icons/notification.svg";
 import "./header.scss";
 import { routeConstants } from "../../utils/routeConstant";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ConfirmModal from "../../sharedComponents/confirmModal/ConfirmModal";
+import { logout } from "../../redux/slices/authSlice";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { isUserLogin } = useSelector((state) => state.auth);
   const navLinks = [
     {
@@ -43,7 +46,9 @@ export default function Header() {
   const toggleModal = () => setModalOpen((prev) => !prev);
 
   const handleConfirm = () => {
-    alert("clicked");
+    dispatch(logout());
+    toggleModal();
+    navigate(routeConstants.HOME_PAGE);
   };
 
   return (

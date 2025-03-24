@@ -151,7 +151,12 @@ export const resetPassword = createAsyncThunk(
 export const authSlice = createSlice({
   name: "auth",
   initialState: authInitialState,
-  reducers: {},
+  reducers: {
+    logout(state) {
+      state.isUserLogin = false;
+      localStorage.clear();
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signupUser.pending, (state) => {
@@ -209,5 +214,5 @@ export const authSlice = createSlice({
       });
   },
 });
-
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;
