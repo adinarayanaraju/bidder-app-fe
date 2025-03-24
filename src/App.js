@@ -9,6 +9,7 @@ import ForgotPassword from "./views/auth/ForgotPassword";
 import VerifyAccount from "./views/auth/VerifyAccount";
 import ResetPassword from "./views/auth/ResetPassword";
 import { routeConstants } from "./utils/routeConstant";
+import Header from "./views/header/Header";
 function App() {
   const dispatch = useDispatch();
   const { data, isLoading, error } = useSelector((state) => state.test);
@@ -19,6 +20,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <Header />
         <Routes>
           <Route path={routeConstants.SIGN_UP} element={<Signup />} />
           <Route path={routeConstants.SIGN_IN} element={<Signin />} />
