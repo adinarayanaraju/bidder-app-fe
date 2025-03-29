@@ -12,12 +12,7 @@ import { routeConstants } from "./utils/routeConstant";
 import Header from "./views/header/Header";
 import Home from "./views/home/Home";
 function App() {
-  const dispatch = useDispatch();
-  const { data, isLoading, error } = useSelector((state) => state.test);
-  console.log("data is", data);
-  useEffect(() => {
-    dispatch(fetchTestData());
-  }, []);
+
   return (
     <>
       <BrowserRouter>

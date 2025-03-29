@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AuctionCard from "../../../sharedComponents/auctionCard/AuctionCard";
 import { Col, Row } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuctionListForHome } from "../../../redux/slices/auctionSlice";
 
 export default function OngoingAuction() {
-  const auctions = ["test", "test", "test","test","test","test", "test"];
+  const dispatch = useDispatch();
+  const { auctionOnHome } = useSelector((state) => state.auction);
+  useEffect(() => {
+    dispatch(getAuctionListForHome());
+  }, []);
   return (
     <div className="ongoing-auction-wrapper">
       <div className="heading d-flex justify-content-center align-items-center">
@@ -11,9 +17,9 @@ export default function OngoingAuction() {
       </div>
       <div className="p-4">
         <Row>
-          {auctions.map((item, index) => (
+          {auctionOnHome?.map((item, index) => (
             <Col key={index} lg={3} md={4} sm={6} xs={12} className="mt-4">
-              <AuctionCard />
+              <AuctionCard data={item} />
             </Col>
           ))}
         </Row>

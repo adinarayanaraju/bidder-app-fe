@@ -3,5 +3,6 @@ export const API_END_POINT = {
   LOGIN_USER: "/auth/login",
   FORGOT_PASSWORD: "/auth/forgot-password",
   VERIFY_ACCOUNT:"auth/verify-account/",
-  RESET_PASSWORD:"auth/reset-password/"
+  RESET_PASSWORD:"auth/reset-password/",
+  GET_AUCTION_LIST:"auction"
 };

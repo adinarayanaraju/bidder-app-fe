@@ -1,9 +1,11 @@
 import { combineReducers } from "redux";
 import testSlice from "./slices/testSlice";
+import auctionSlice  from "./slices/auctionSlice";
 import authSlice, { logout } from "./slices/authSlice";
 const appReducer = combineReducers({
   test: testSlice,
   auth: authSlice,
+  auction: auctionSlice
 });
 
 const rootReducer = (state, action) => {

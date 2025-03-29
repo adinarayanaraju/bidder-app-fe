@@ -14,7 +14,6 @@ export const fetchTestData = createAsyncThunk(
     // api calling logic
     try {
       const response = await axios.get("https://dummyjson.com/posts");
-      console.log(response)
       if (response.status === 200) {
         return response.data;
       } else {
