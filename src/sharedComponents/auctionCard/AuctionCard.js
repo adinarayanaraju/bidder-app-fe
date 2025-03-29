@@ -1,6 +1,11 @@
 import React from "react";
 import { Card, CardBody, CardTitle, CardText, Badge } from "reactstrap";
 import "./auctionCard.scss";
+import {
+  formatDate,
+  getTimeLeft,
+  truncateText,
+} from "../../utils/commonFunction";
 
 export default function AuctionCard({ data }) {
   return (
@@ -17,7 +22,7 @@ export default function AuctionCard({ data }) {
       </div>
       <CardBody>
         <CardTitle tag="h5" className="product-name">
-          {data?.item_name}
+          {truncateText(data?.item_name, 50)}
         </CardTitle>
         <CardText className="price-bids d-flex justify-content-between mt-2">
           <div className="d-flex justify-content-center align-items-center">
@@ -29,7 +34,8 @@ export default function AuctionCard({ data }) {
           </span>
         </CardText>
         <CardText className="time-left">
-          Time left 2hr <p className="end-time m-0">(2d)</p>
+          Time left {getTimeLeft(data?.end_date)}{" "}
+          <p className="end-time m-0">({formatDate(data?.end_date, "h:mm A")})</p>
         </CardText>
       </CardBody>
     </Card>
