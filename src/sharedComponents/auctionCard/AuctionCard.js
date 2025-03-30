@@ -6,10 +6,20 @@ import {
   getTimeLeft,
   truncateText,
 } from "../../utils/commonFunction";
+import { useNavigate } from "react-router-dom";
+import { routeConstants } from "../../utils/routeConstant";
 
 export default function AuctionCard({ data }) {
+  const navigate = useNavigate();
+
+  const handleRedirection = () => {
+    navigate(`${routeConstants.AUCTION_DETAIL}/${data?.id}`);
+  };
   return (
-    <Card className="auction-card p-1 cursor-pointer">
+    <Card
+      className="auction-card p-1 cursor-pointer"
+      onClick={handleRedirection}
+    >
       <div className="image-container">
         <img
           src="https://media.istockphoto.com/id/1317323736/photo/a-view-up-into-the-trees-direction-sky.jpg?s=612x612&w=0&k=20&c=i4HYO7xhao7CkGy7Zc_8XSNX_iqG0vAwNsrH1ERmw2Q="
@@ -35,7 +45,9 @@ export default function AuctionCard({ data }) {
         </CardText>
         <CardText className="time-left">
           Time left {getTimeLeft(data?.end_date)}{" "}
-          <p className="end-time m-0">({formatDate(data?.end_date, "h:mm A")})</p>
+          <p className="end-time m-0">
+            ({formatDate(data?.end_date, "h:mm A")})
+          </p>
         </CardText>
       </CardBody>
     </Card>

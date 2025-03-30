@@ -11,6 +11,7 @@ import ResetPassword from "./views/auth/ResetPassword";
 import { routeConstants } from "./utils/routeConstant";
 import Header from "./views/header/Header";
 import Home from "./views/home/Home";
+import AuctionDetails from "./views/auctionDetails/AuctionDetails";
 function App() {
 
   return (
@@ -32,6 +33,10 @@ function App() {
           <Route
             path={routeConstants.RESET_PASSWORD}
             element={<ResetPassword />}
+          />
+          <Route
+            path={`${routeConstants.AUCTION_DETAIL}/:id`}
+            element={<AuctionDetails />}
           />
         </Routes>
       </BrowserRouter>
