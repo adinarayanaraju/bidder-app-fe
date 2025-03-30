@@ -29,3 +29,10 @@ export const getTimeLeft = (endDate) => {
 export const formatDate = (date, format) => {
   return moment(date).format(format);
 };
+
+export const capitalizeFirstChar = (str) => {
+  if (typeof str !== "string" || !str.trim()) {
+    return str;
+  }
+  return str?.charAt(0)?.toUpperCase() + str?.slice(1);
+};
