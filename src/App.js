@@ -35,7 +35,7 @@ function App() {
             element={<ResetPassword />}
           />
           <Route
-            path={`${routeConstants.AUCTION_DETAIL}/:id`}
+            path={`${routeConstants.AUCTION_DETAIL}/:auction_id`}
             element={<AuctionDetails />}
           />
         </Routes>

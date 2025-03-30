@@ -61,8 +61,8 @@ export default function Header() {
             <nav className={`nav ${menuOpen ? "open" : ""}`}>
               {menuOpen && <h1 className="logo">BidMaster</h1>}
               <ul className="nav-links">
-                {navLinks.map((item) => (
-                  <li>
+                {navLinks.map((item, index) => (
+                  <li key={index}>
                     <NavLink
                       to={item.path}
                       className={({ isActive }) => (isActive ? "active" : "")}

@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./auctionDetail.scss";
 import { Row, Button, Col } from "reactstrap";
 import heartIcon from "../../assets/icons/heart.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuctionDetailById } from "../../redux/slices/auctionSlice";
+import { useParams } from "react-router-dom";
+import { formatDate, getTimeLeft } from "../../utils/commonFunction";
 
 export default function AuctionDetails() {
+  const dispatch = useDispatch();
+  const { auction_id } = useParams();
+  const { auctionDetail } = useSelector((state) => state.auction);
+
+  useEffect(() => {
+    dispatch(getAuctionDetailById(auction_id));
+  }, [auction_id]);
+
   return (
     <div className="auction-detail-wrapper">
       <Row>
@@ -11,26 +23,27 @@ export default function AuctionDetails() {
         {/* Details take 50% width */}
         <Col md={6}>
           <div className="auction-details">
-            <p className="heading">XYZ instrument</p>
-            <p className="time-left">Time left 4d 20h (Sat, 2:39PM)</p>
-            <p className="price">RS. 192,00</p>
-            <p className="auction-info">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum
-              blanditiis, fugit laborum hic sint earum dignissimos
-              exercitationem eligendi quibusdam illo sequi explicabo natus unde
-              modi obcaecati eius ad animi iusto!
+            <p className="heading">{auctionDetail?.item_name}</p>
+            <p className="time-left">
+              Time left {getTimeLeft(auctionDetail?.end_date)} (
+              {formatDate(auctionDetail?.end_date, "ddd")},{" "}
+              {formatDate(auctionDetail?.end_date, "h:mm A")})
             </p>
+            <p className="price">RS. {auctionDetail?.base_price}</p>
+            <p className="auction-info">{auctionDetail?.description}</p>
             {/* Seller Information Section */}
             <div className="seller-info">
               <h1>Seller Information</h1>
               <p>
-                <strong>First Name:</strong> Vivek
+                <strong>First Name:</strong>{" "}
+                {auctionDetail?.creator?.first_name}
               </p>
               <p>
-                <strong>Last Name:</strong> Kumar
+                <strong>Last Name: </strong>
+                {auctionDetail?.creator?.last_name}
               </p>
               <p>
-                <strong>Email:</strong> vivek@gmail.com
+                <strong>Email:</strong> {auctionDetail?.creator?.email}
               </p>
             </div>
             <div className="bid-now-btn">
