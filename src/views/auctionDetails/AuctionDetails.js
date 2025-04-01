@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./auctionDetail.scss";
 import { Row, Button, Col } from "reactstrap";
 import heartIcon from "../../assets/icons/heart.svg";
@@ -11,8 +11,12 @@ import {
   getTimeLeft,
 } from "../../utils/commonFunction";
 import NoRecord from "../../sharedComponents/noRecord/NoRecord";
+import CustomModal from "../../sharedComponents/customModal/CustomModal";
+import { CONSTANT_NAME } from "../../utils/propertyResolver";
+import PlaceBid from "./components/PlaceBid";
 
 export default function AuctionDetails() {
+  const [isPlaceModalShow, setIsPlaceModalShow] = useState(false);
   const dispatch = useDispatch();
   const { auction_id } = useParams();
   const { auctionDetail, isLoading } = useSelector((state) => state.auction);
@@ -20,6 +24,8 @@ export default function AuctionDetails() {
   useEffect(() => {
     dispatch(getAuctionDetailById(auction_id));
   }, [auction_id]);
+
+  const toggleModal = () => setIsPlaceModalShow(!isPlaceModalShow);
 
   return (
     <>
@@ -58,7 +64,7 @@ export default function AuctionDetails() {
                   </p>
                 </div>
                 <div className="bid-now-btn">
-                  <Button>Bid Now</Button>
+                  <Button onClick={toggleModal}>Bid Now</Button>
                   <div className="save-draft">
                     <img src={heartIcon} alt="save" />
                   </div>
@@ -67,6 +73,15 @@ export default function AuctionDetails() {
             </Col>
           </Row>
         </div>
+      )}
+      {isPlaceModalShow && (
+        <CustomModal
+          isOpen={isPlaceModalShow}
+          toggle={toggleModal}
+          title={CONSTANT_NAME.PLACE_YOUR_BID}
+        >
+          <PlaceBid />
+        </CustomModal>
       )}
     </>
   );
