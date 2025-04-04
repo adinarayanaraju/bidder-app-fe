@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { GET } from "../../services/axiosRequestHandler";
+import { GET, POST } from "../../services/axiosRequestHandler";
 import { API_END_POINT } from "../../utils/apiEndPoints";
 import { showToast } from "../../sharedComponents/toast/showTaost";
-import { ERROR_MESSAGE } from "../../utils/propertyResolver";
+import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../utils/propertyResolver";
 
 const auctionInitialState = {
   isLoading: false,
@@ -65,6 +65,34 @@ export const getAuctionDetailById = createAsyncThunk(
   }
 );
 
+export const placeBid = createAsyncThunk(
+  "auction/placeBid",
+  async (payload, thunkApi) => {
+    try {
+      const response = await POST(API_END_POINT.BID_APPLY, payload);
+      if (response?.status === 200) {
+        showToast(
+          response?.response?.data?.message || SUCCESS_MESSAGE.BID_PLACE
+        );
+        return response?.response?.data?.data;
+      } else {
+        showToast(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+          "error"
+        );
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const auctionSlice = createSlice({
   name: "auction",
   initialState: auctionInitialState,
@@ -94,6 +122,16 @@ export const auctionSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
         state.auctionDetail = null;
+      })
+      .addCase(placeBid.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(placeBid.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(placeBid.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });

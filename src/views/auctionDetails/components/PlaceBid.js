@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import "./placeBid.scss";
 import CustomInput from "../../../sharedComponents/customInput/CustomInput";
 import { formatDate, getTimeLeft } from "../../../utils/commonFunction";
+import { useDispatch, useSelector } from "react-redux";
+import { placeBid } from "../../../redux/slices/auctionSlice";
 
-export default function PlaceBid({ auctionDetail }) {
+export default function PlaceBid({ auctionDetail, toggleModal }) {
   const [bidAmtArr, setBidAmtArr] = useState([]);
   const [bidValue, setBidValue] = useState("");
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.auction);
 
   const handleBidChange = (e) => {
     const input = e.target.value;
@@ -41,6 +45,19 @@ export default function PlaceBid({ auctionDetail }) {
     }
   };
 
+  const handlePlaceBid = async () => {
+    try {
+      const payload = {
+        auction_id: auctionDetail?.id,
+        bid_amount: bidValue,
+      };
+      await dispatch(placeBid(payload)).unwrap();
+      toggleModal();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     generateRandomAmt(auctionDetail?.base_price);
   }, [auctionDetail?.base_price]);
@@ -72,7 +89,11 @@ export default function PlaceBid({ auctionDetail }) {
           onChange={handleBidChange}
           error={error}
         />
-        <button disabled={!bidValue || error} className="mt-3">
+        <button
+          disabled={!bidValue || error || isLoading}
+          className="mt-3"
+          onClick={handlePlaceBid}
+        >
           Place bid
         </button>
       </div>
