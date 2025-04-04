@@ -80,7 +80,7 @@ export default function AuctionDetails() {
           toggle={toggleModal}
           title={CONSTANT_NAME.PLACE_YOUR_BID}
         >
-          <PlaceBid />
+          <PlaceBid auctionDetail={auctionDetail}/>
         </CustomModal>
       )}
     </>
