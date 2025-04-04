@@ -1,23 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./placeBid.scss";
 import CustomInput from "../../../sharedComponents/customInput/CustomInput";
+import { formatDate, getTimeLeft } from "../../../utils/commonFunction";
 
-export default function PlaceBid() {
-  const [bidAmtArr, setBidAmtArr] = useState([141, 414, 5547]);
+export default function PlaceBid({ auctionDetail }) {
+  const [bidAmtArr, setBidAmtArr] = useState([]);
   const [bidValue, setBidValue] = useState("");
   const [error, setError] = useState("");
 
   const handleBidChange = (e) => {
-    setBidValue(e.target.value);
+    const input = e.target.value;
+
+    // Allow empty input for deletion, otherwise enforce number validation
+    if (input === "" || /^[1-9]\d*$/.test(input)) {
+      const numValue = Number(input);
+      if (input !== "" && numValue < auctionDetail?.base_price) {
+        setError(`Bid must be greater than INR ${auctionDetail?.base_price}`);
+      } else {
+        setError("");
+      }
+      setBidValue(numValue);
+    }
   };
+
+  const generateRandomAmt = (baseAmt) => {
+    const newAmt = new Set();
+    while (newAmt.size < 3) {
+      const randomAmount = Math.floor(Math.random() * 100) + baseAmt + 1; // Ensure it's greater than the baseAmt
+      newAmt.add(randomAmount);
+    }
+    setBidAmtArr([...newAmt]);
+  };
+
+  const handleBidButtonClick = (amount) => {
+    if (amount >= auctionDetail?.base_price) {
+      setBidValue(amount);
+      setError("");
+    } else {
+      setError(`Bid must be greater than INR ${auctionDetail?.base_price}`);
+    }
+  };
+
+  useEffect(() => {
+    generateRandomAmt(auctionDetail?.base_price);
+  }, [auctionDetail?.base_price]);
   return (
     <div className="place-bid-wrapper">
       <div className="heading">
-        <p>Time left 4d 20h (stat, 2.39PM)</p>
+        <p>
+          {" "}
+          Time left {getTimeLeft(auctionDetail?.end_date)} (
+          {formatDate(auctionDetail?.end_date, "ddd")},{" "}
+          {formatDate(auctionDetail?.end_date, "h:mm A")})
+        </p>
       </div>
       <div className="bid-price-btn">
         {bidAmtArr?.map((item) => (
-          <button key={item}>Bid INR: {item}</button>
+          <button key={item} onClick={() => handleBidButtonClick(item)}>
+            Bid INR: {item}
+          </button>
         ))}
       </div>
       <div className="divider"></div>
@@ -31,7 +72,7 @@ export default function PlaceBid() {
           onChange={handleBidChange}
           error={error}
         />
-        <button disabled className="mt-3">
+        <button disabled={!bidValue || error} className="mt-3">
           Place bid
         </button>
       </div>
