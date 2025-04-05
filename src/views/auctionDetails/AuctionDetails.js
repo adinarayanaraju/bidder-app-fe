@@ -15,6 +15,7 @@ import CustomModal from "../../sharedComponents/customModal/CustomModal";
 import { CONSTANT_NAME } from "../../utils/propertyResolver";
 import PlaceBid from "./components/PlaceBid";
 import Loader from "../../sharedComponents/loader/Loader";
+import CustomSlider from "../../sharedComponents/customSlider/CustomSlider";
 
 export default function AuctionDetails() {
   const [isPlaceModalShow, setIsPlaceModalShow] = useState(false);
@@ -31,13 +32,28 @@ export default function AuctionDetails() {
   return (
     <>
       {isLoading ? (
-       <Loader />
+        <Loader />
       ) : !auctionDetail && !isLoading ? (
         <NoRecord />
       ) : (
         <div className="auction-detail-wrapper">
           <Row>
-            <Col md={6}>{/* Slider */}</Col>
+            <Col md={6}>
+              <CustomSlider
+                dataList={[
+                  "https://picsum.photos/id/1015/600/400",
+                  "https://picsum.photos/id/1016/600/400",
+                  "https://picsum.photos/id/1018/600/400",
+                  "https://picsum.photos/id/1020/600/400",
+                  "https://picsum.photos/id/1024/600/400",
+                  "https://picsum.photos/id/1025/600/400",
+                  "https://picsum.photos/id/1033/600/400",
+                  "https://picsum.photos/id/1035/600/400",
+                  "https://picsum.photos/id/1039/600/400",
+                  "https://picsum.photos/id/1043/600/400",
+                ]}
+              />
+            </Col>
             {/* Details take 50% width */}
             <Col md={6}>
               <div className="auction-details">
@@ -81,7 +97,7 @@ export default function AuctionDetails() {
           toggle={toggleModal}
           title={CONSTANT_NAME.PLACE_YOUR_BID}
         >
-          <PlaceBid auctionDetail={auctionDetail} toggleModal={toggleModal}/>
+          <PlaceBid auctionDetail={auctionDetail} toggleModal={toggleModal} />
         </CustomModal>
       )}
     </>
