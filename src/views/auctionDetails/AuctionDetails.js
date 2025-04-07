@@ -16,6 +16,8 @@ import { CONSTANT_NAME } from "../../utils/propertyResolver";
 import PlaceBid from "./components/PlaceBid";
 import Loader from "../../sharedComponents/loader/Loader";
 import CustomSlider from "../../sharedComponents/customSlider/CustomSlider";
+import CustomBreadCrumb from "../../sharedComponents/customBreadCrumb/CustomBreadCrumb";
+import { routeConstants } from "../../utils/routeConstant";
 
 export default function AuctionDetails() {
   const [isPlaceModalShow, setIsPlaceModalShow] = useState(false);
@@ -37,6 +39,11 @@ export default function AuctionDetails() {
         <NoRecord />
       ) : (
         <div className="auction-detail-wrapper">
+          <CustomBreadCrumb 
+            parentName={"Home"}
+            parentRoute={routeConstants.HOME_PAGE}
+            currentName={"Auction Detail"}
+          />
           <Row>
             <Col md={6}>
               <CustomSlider
