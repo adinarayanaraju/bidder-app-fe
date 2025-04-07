@@ -51,6 +51,10 @@ export default function AuctionDetails() {
                   "https://picsum.photos/id/1035/600/400",
                   "https://picsum.photos/id/1039/600/400",
                   "https://picsum.photos/id/1043/600/400",
+                  "https://picsum.photos/id/1033/600/400",
+                  "https://picsum.photos/id/1035/600/400",
+                  "https://picsum.photos/id/1039/600/400",
+                  "https://picsum.photos/id/1043/600/400",
                 ]}
               />
             </Col>
