@@ -39,10 +39,12 @@ export default function AuctionDetails() {
         <NoRecord />
       ) : (
         <div className="auction-detail-wrapper">
-          <CustomBreadCrumb 
-            parentName={"Home"}
-            parentRoute={routeConstants.HOME_PAGE}
-            currentName={"Auction Detail"}
+          <CustomBreadCrumb
+            items={[
+              { name: "Home", route: routeConstants.HOME_PAGE },
+              { name: "Auction", route: routeConstants.SIGN_IN },
+              { name: "Auction Detail", route: routeConstants.AUCTION_DETAIL },
+            ]}
           />
           <Row>
             <Col md={6}>
