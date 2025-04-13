@@ -12,8 +12,8 @@ import { routeConstants } from "./utils/routeConstant";
 import Header from "./views/header/Header";
 import Home from "./views/home/Home";
 import AuctionDetails from "./views/auctionDetails/AuctionDetails";
+import CreateAuction from "./views/createAuction/CreateAuction";
 function App() {
-
   return (
     <>
       <BrowserRouter>
@@ -38,6 +38,7 @@ function App() {
             path={`${routeConstants.AUCTION_DETAIL}/:auction_id`}
             element={<AuctionDetails />}
           />
+          <Route path={routeConstants.AUCTION_CREATE} element={<CreateAuction />} />
         </Routes>
       </BrowserRouter>
     </>
