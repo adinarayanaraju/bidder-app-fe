@@ -47,3 +47,5 @@ export const mapToSelectOptions = (data, labelKey, valueKey) => {
     value: item[valueKey],
   }));
 };
+
+export const formatToISO = (dateObj) => dateObj?.toDate()?.toISOString();
