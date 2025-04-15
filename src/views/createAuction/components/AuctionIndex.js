@@ -3,9 +3,18 @@ import cameraIcon from "./../../../assets/icons/camera.svg";
 import editIcon from "./../../../assets/icons/edit.svg";
 import eyeIcon from "./../../../assets/icons/eye.svg";
 import CustomStepper from "./../../../sharedComponents/customStepper/CustomStepper";
+import AuctionDescription from "./AuctionDescription";
 
 export default function AuctionIndex() {
   const [activeStep, setActiveStep] = useState(0);
+  const [createAuctionState, setCreateAuctionState] = useState({
+    productName: "",
+    basePrice: "",
+    startDate:"",
+    endDate:"",
+    category:{},
+    photos:[]
+  })
   const createAuctionStep = [
     {
       label: "Description",
@@ -44,14 +53,25 @@ export default function AuctionIndex() {
       setActiveStep(index);
     }
   };
+
   const handleNext = () => {
     if (isStepValid(activeStep)) {
       setActiveStep((prev) => prev + 1);
     }
   };
+
   const handlePrev = () => {
     setActiveStep((prev) => prev - 1);
   };
+
+  const handleChange = (e)=>{
+    const {name, value} = e.target;
+    setCreateAuctionState((prevState)=>({
+      ...prevState,
+      [name]: value
+    }))
+  }
+  
   return (
     <div>
       <CustomStepper
@@ -62,7 +82,15 @@ export default function AuctionIndex() {
       />
       {/* Component goes here on the basis of active index */}
       <div className="auction-form-card container-fluid">
-
+          {
+            activeStep === 0 && (
+              <AuctionDescription 
+                createAuctionState={createAuctionState}
+                setCreateAuctionState={setCreateAuctionState}
+                handleChange={handleChange}
+              />
+            )
+          }
 
         {/* Button for next and prev */}
         <div className="d-flex justify-content-center align-items-cents gap-4 mt-4 auction-stepper-btn">
