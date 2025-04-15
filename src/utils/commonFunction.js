@@ -36,3 +36,14 @@ export const capitalizeFirstChar = (str) => {
   }
   return str?.charAt(0)?.toUpperCase() + str?.slice(1);
 };
+
+// Convert array of objects to react-select options
+export const mapToSelectOptions = (data, labelKey, valueKey) => {
+  if (!Array.isArray(data) || !labelKey || !valueKey) {
+    return data;
+  }
+  return data?.map((item) => ({
+    label: item[labelKey],
+    value: item[valueKey],
+  }));
+};

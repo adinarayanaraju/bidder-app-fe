@@ -9,6 +9,7 @@ const auctionInitialState = {
   error: null,
   auctionOnHome: [],
   auctionDetail: null,
+  auctionCategoryList: [],
 };
 
 export const getAuctionListForHome = createAsyncThunk(
@@ -93,6 +94,31 @@ export const placeBid = createAsyncThunk(
   }
 );
 
+export const getAuctionCategoryLIst = createAsyncThunk(
+  "auction/getAuctionCategoryLIst",
+  async (_, thunkApi) => {
+    try {
+      const response = await GET(API_END_POINT.GET_AUCTION_CATEGORY_LIST);
+      if (response?.status === 200) {
+        return response?.response?.data?.data;
+      } else {
+        showToast(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+          "error"
+        );
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const auctionSlice = createSlice({
   name: "auction",
   initialState: auctionInitialState,
@@ -132,6 +158,18 @@ export const auctionSlice = createSlice({
       .addCase(placeBid.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      })
+      .addCase(getAuctionCategoryLIst.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAuctionCategoryLIst.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.auctionCategoryList = action.payload;
+      })
+      .addCase(getAuctionCategoryLIst.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.auctionCategoryList = [];
       });
   },
 });

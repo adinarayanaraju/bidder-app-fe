@@ -1,20 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cameraIcon from "./../../../assets/icons/camera.svg";
 import editIcon from "./../../../assets/icons/edit.svg";
 import eyeIcon from "./../../../assets/icons/eye.svg";
 import CustomStepper from "./../../../sharedComponents/customStepper/CustomStepper";
 import AuctionDescription from "./AuctionDescription";
+import { useDispatch } from "react-redux";
+import { getAuctionCategoryLIst } from "../../../redux/slices/auctionSlice";
+import { useSelector } from "react-redux";
+import Loader from "../../../sharedComponents/loader/Loader";
+import { mapToSelectOptions } from "../../../utils/commonFunction";
 
 export default function AuctionIndex() {
   const [activeStep, setActiveStep] = useState(0);
   const [createAuctionState, setCreateAuctionState] = useState({
     productName: "",
     basePrice: "",
-    startDate:"",
-    endDate:"",
-    category:"",
-    photos:[]
-  })
+    startDate: "",
+    endDate: "",
+    category: "",
+    photos: [],
+  });
   const createAuctionStep = [
     {
       label: "Description",
@@ -29,6 +34,16 @@ export default function AuctionIndex() {
       icon: eyeIcon,
     },
   ];
+
+  const { auctionCategoryList, isLoading } = useSelector(
+    (state) => state.auction
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAuctionCategoryLIst());
+  }, []);
 
   //   Validation for each step
   const isStepValid = (stepIndex) => {
@@ -64,16 +79,17 @@ export default function AuctionIndex() {
     setActiveStep((prev) => prev - 1);
   };
 
-  const handleChange = (e)=>{
-    const {name, value} = e.target;
-    setCreateAuctionState((prevState)=>({
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCreateAuctionState((prevState) => ({
       ...prevState,
-      [name]: value
-    }))
-  }
-  
+      [name]: value,
+    }));
+  };
+
   return (
     <div>
+      {isLoading && <Loader />}
       <CustomStepper
         steps={createAuctionStep}
         activeStep={activeStep}
@@ -82,15 +98,18 @@ export default function AuctionIndex() {
       />
       {/* Component goes here on the basis of active index */}
       <div className="auction-form-card container-fluid">
-          {
-            activeStep === 0 && (
-              <AuctionDescription 
-                createAuctionState={createAuctionState}
-                setCreateAuctionState={setCreateAuctionState}
-                handleChange={handleChange}
-              />
-            )
-          }
+        {activeStep === 0 && (
+          <AuctionDescription
+            createAuctionState={createAuctionState}
+            setCreateAuctionState={setCreateAuctionState}
+            handleChange={handleChange}
+            auctionCategoryList={mapToSelectOptions(
+              auctionCategoryList,
+              "name",
+              "id"
+            )}
+          />
+        )}
 
         {/* Button for next and prev */}
         <div className="d-flex justify-content-center align-items-cents gap-4 mt-4 auction-stepper-btn">

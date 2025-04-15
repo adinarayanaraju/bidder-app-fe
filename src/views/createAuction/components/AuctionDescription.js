@@ -7,6 +7,7 @@ export default function AuctionDescription({
   createAuctionState,
   setCreateAuctionState,
   handleChange,
+  auctionCategoryList,
 }) {
   const handleCategoryChange = (value) => {
     setCreateAuctionState((prevState) => ({
@@ -47,11 +48,7 @@ export default function AuctionDescription({
             onChange={handleCategoryChange}
             placeholder="Choose a category"
             required
-            options={[
-              { value: "chocolate", label: "Chocolate" },
-              { value: "strawberry", label: "Strawberry" },
-              { value: "vanilla", label: "Vanilla" },
-            ]}
+            options={auctionCategoryList || []}
           />
         </Col>
         <Col md={6}></Col>
