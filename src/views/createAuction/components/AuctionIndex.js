@@ -12,7 +12,7 @@ export default function AuctionIndex() {
     basePrice: "",
     startDate:"",
     endDate:"",
-    category:{},
+    category:"",
     photos:[]
   })
   const createAuctionStep = [

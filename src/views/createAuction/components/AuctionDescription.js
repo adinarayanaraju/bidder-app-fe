@@ -1,12 +1,19 @@
 import React from "react";
 import { Col, Row } from "reactstrap";
 import CustomInput from "../../../sharedComponents/customInput/CustomInput";
+import CustomDropDown from "../../../sharedComponents/customDropDown/CustomDropDown";
 
 export default function AuctionDescription({
   createAuctionState,
   setCreateAuctionState,
   handleChange,
 }) {
+  const handleCategoryChange = (value) => {
+    setCreateAuctionState((prevState) => ({
+      ...prevState,
+      category: value,
+    }));
+  };
   return (
     <div className="auction-description-wrapper">
       <Row>
@@ -30,6 +37,24 @@ export default function AuctionDescription({
             required={true}
           />
         </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col md={6}>
+          <CustomDropDown
+            label="Select a Category"
+            name="category"
+            value={createAuctionState?.category}
+            onChange={handleCategoryChange}
+            placeholder="Choose a category"
+            required
+            options={[
+              { value: "chocolate", label: "Chocolate" },
+              { value: "strawberry", label: "Strawberry" },
+              { value: "vanilla", label: "Vanilla" },
+            ]}
+          />
+        </Col>
+        <Col md={6}></Col>
       </Row>
     </div>
   );
