@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import Loader from "../../../sharedComponents/loader/Loader";
 import { mapToSelectOptions } from "../../../utils/commonFunction";
 import AuctionDescription from "./AuctionDescription";
+import AuctionPhotos from "./AuctionPhotos";
 
 export default function AuctionIndex() {
   const [activeStep, setActiveStep] = useState(0);
@@ -120,6 +121,13 @@ export default function AuctionIndex() {
         {activeStep === 1 && (
           <AuctionDescription
             createAuctionState={createAuctionState}
+            setCreateAuctionState={setCreateAuctionState}
+          />
+        )}
+
+        {activeStep === 2 && (
+          <AuctionPhotos
+          createAuctionState={createAuctionState}
             setCreateAuctionState={setCreateAuctionState}
           />
         )}
