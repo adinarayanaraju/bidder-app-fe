@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./customEditor.scss";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
@@ -17,6 +17,8 @@ export default function CustomEditor({
   maxLength,
 }) {
   const [charCount, setCharCount] = useState(0);
+  const quillRef = useRef(null);
+  const lastContentRef = useRef(value || "");
 
   useEffect(() => {
     const temp = document.createElement("div");
@@ -25,25 +27,30 @@ export default function CustomEditor({
     setCharCount(text.length);
   }, [value]);
 
-  const handleStateUpdate = (content) => {
-    if (name) {
-      onChange(content, name);
-    } else {
-      onChange(content);
-    }
-  };
+  useEffect(() => {
+    const quill = quillRef.current?.getEditor();
+    if (!quill) return;
 
-  const handleChange = (content, delta, source, editor) => {
-    if (maxLength) {
-      const plainText = editor.getText(); // this gets plain text (without html tags)
-      if (plainText?.trim()?.length <= maxLength) {
-        handleStateUpdate(content);
+    const handleTextChange = (source) => {
+      const text = quill.getText().trim();
+      if (text.length > maxLength) {
+        quill.root.innerHTML = lastContentRef.current;
       } else {
+        const html = quill.root.innerHTML;
+        lastContentRef.current = html;
+        if (name) {
+          onChange(html, name);
+        } else {
+          onChange(html);
+        }
       }
-    } else {
-      handleStateUpdate(content);
-    }
-  };
+    };
+    quill.on("text-change", handleTextChange);
+    return () => {
+      quill.off("text-change".handleTextChange);
+    };
+  }, [maxLength, onChange, name]);
+
   return (
     <div className="custom-editor-wrapper position-relative">
       <FormGroup>
@@ -56,9 +63,10 @@ export default function CustomEditor({
         <ReactQuill
           theme={theme}
           value={value}
-          onChange={handleChange}
+          onChange={() => {}}
           readOnly={readOnly}
           placeholder={placeholder}
+          ref={quillRef}
         />
         {error && <div className="invalid-feedback d-block">{error}</div>}
         {/* Char count */}
