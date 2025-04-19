@@ -7,5 +7,6 @@ export const API_END_POINT = {
   GET_AUCTION_LIST:"/auction",
   GET_AUCTION_DETAIL_BY_ID: "/auction/auction-detail",
   BID_APPLY: "/bid/create",
-  GET_AUCTION_CATEGORY_LIST:"/auction-category"
+  GET_AUCTION_CATEGORY_LIST:"/auction-category",
+  GET_PRESIGNED_URL:"/aws/get-presigned-url"
 };
