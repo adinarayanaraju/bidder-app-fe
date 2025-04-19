@@ -5,6 +5,7 @@ import deleteIcon from "../../../assets/icons/white_delete.svg";
 import dummyImage from "../../../assets/icons/warning.svg";
 import { CONSTANT_NAME } from "../../../utils/propertyResolver";
 import { showToast } from "../../../sharedComponents/toast/showTaost";
+import { uploadFileViaPresignedUrl } from "../../../utils/commonFunction";
 export default function AuctionPhotos() {
   const fileInputRef = useRef(null);
 
@@ -12,29 +13,46 @@ export default function AuctionPhotos() {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
-    files.forEach((file) => {
-      const isValidType = CONSTANT_NAME.AUCTION_PHOTO_VALIDATION.includes(
-        file.type
-      );
-      const isValidSize = file.size < CONSTANT_NAME.AUCTION_PHOTO_MAX_SIZE;
-      if (!isValidType) {
-        const errorMessage = `${file.name} is not a valid file type.`;
-        showToast(errorMessage, "warning");
-        return;
-      }
-      if (!isValidSize) {
-        const errorMessage = `${file.name} is too large.`;
-        showToast(errorMessage, "warning");
-        return;
-      }
-      // File is valid
 
-    });
-    // Reset input so same file can be re upload
+    try {
+      for (const file of files) {
+        const isValidType = CONSTANT_NAME.AUCTION_PHOTO_VALIDATION.includes(
+          file.type
+        );
+        const isValidSize = file.size < CONSTANT_NAME.AUCTION_PHOTO_MAX_SIZE;
+
+        if (!isValidType) {
+          const errorMessage = `${file.name} is not a valid file type.`;
+          showToast(errorMessage, "warning");
+          continue;
+        }
+
+        if (!isValidSize) {
+          const errorMessage = `${file.name} is too large.`;
+          showToast(errorMessage, "warning");
+          continue;
+        }
+
+        try {
+          // File is valid, try uploading
+          const fileUploadInfo = await uploadFileViaPresignedUrl(file);
+          console.log("upload file info", fileUploadInfo);
+        } catch (uploadErr) {
+          // Handle upload-specific error via toast
+          showToast(uploadErr.message || "File upload failed", "error");
+        }
+      }
+    } catch (err) {
+      // Catch anything unexpected
+      showToast(err.message || "Unexpected error", "error");
+    }
+
+    // Reset input so same file can be re-uploaded
     e.target.value = "";
   };
+
   return (
     <div className="auction-photos-wrapper">
       <Label className="form-label">

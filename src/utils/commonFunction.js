@@ -1,4 +1,7 @@
 import moment from "moment";
+import { GET } from "../services/axiosRequestHandler";
+import { API_END_POINT } from "./apiEndPoints";
+import axios from "axios";
 
 export const truncateText = (text = "", maxLength = 0) => {
   if (typeof text !== "string") return text;
@@ -49,3 +52,49 @@ export const mapToSelectOptions = (data, labelKey, valueKey) => {
 };
 
 export const formatToISO = (dateObj) => dateObj?.toDate()?.toISOString();
+
+export const uploadFileViaPresignedUrl = async (
+  file,
+  bucketName = "bidderapptest"
+) => {
+  try {
+    if (!file) {
+      throw new Error("No file provided");
+    }
+
+    // Generate unique file name using timestamp + random string
+    const timestamp = Date.now();
+    const extension = file.name.split(".").pop();
+    const uniqueFileName = `upload/${timestamp}-${Math.random()
+      .toString(36)
+      .substring(2)}.${extension}`;
+    const params = `?fileName=${encodeURIComponent(
+      uniqueFileName
+    )}&contentType=${encodeURIComponent(file.type)}&bucketName=${bucketName}`;
+
+    //  Api calling for getting presigned url
+    const { response, status } = await GET(
+      API_END_POINT.GET_PRESIGNED_URL,
+      params
+    );
+    if (status === 200) {
+      const { signedUrl, fileName, finalURL } = response?.data?.data;
+
+      // Api calling for the signedUrl
+      const uploadResponse = await axios.put(signedUrl, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      if (uploadResponse.status !== 200) {
+        throw new Error("Failed to upload file");
+      }
+      return { finalURL, fileName };
+    } else {
+      throw new Error("Failed to get presigned url");
+    }
+  } catch (error) {
+    throw new Error(error.message || "File upload failed");
+  }
+};
