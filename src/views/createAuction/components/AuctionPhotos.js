@@ -3,6 +3,8 @@ import { Label } from "reactstrap";
 import uploadIcon from "../../../assets/icons/upload.svg";
 import deleteIcon from "../../../assets/icons/white_delete.svg";
 import dummyImage from "../../../assets/icons/warning.svg";
+import { CONSTANT_NAME } from "../../../utils/propertyResolver";
+import { showToast } from "../../../sharedComponents/toast/showTaost";
 export default function AuctionPhotos() {
   const fileInputRef = useRef(null);
 
@@ -11,7 +13,27 @@ export default function AuctionPhotos() {
   };
 
   const handleFileChange = (e) => {
-    console.log(e.target.files);
+    const files = Array.from(e.target.files);
+    files.forEach((file) => {
+      const isValidType = CONSTANT_NAME.AUCTION_PHOTO_VALIDATION.includes(
+        file.type
+      );
+      const isValidSize = file.size < CONSTANT_NAME.AUCTION_PHOTO_MAX_SIZE;
+      if (!isValidType) {
+        const errorMessage = `${file.name} is not a valid file type.`;
+        showToast(errorMessage, "warning");
+        return;
+      }
+      if (!isValidSize) {
+        const errorMessage = `${file.name} is too large.`;
+        showToast(errorMessage, "warning");
+        return;
+      }
+      // File is valid
+
+    });
+    // Reset input so same file can be re upload
+    e.target.value = "";
   };
   return (
     <div className="auction-photos-wrapper">
