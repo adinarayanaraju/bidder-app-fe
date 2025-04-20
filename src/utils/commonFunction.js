@@ -98,3 +98,9 @@ export const uploadFileViaPresignedUrl = async (
     throw new Error(error.message || "File upload failed");
   }
 };
+
+export const htmlToText = (html) => {
+  const temp = document.createElement("div");
+  temp.innerHTML = html || "";
+  return temp.textContent || temp.innerText || "";
+};

@@ -35,6 +35,7 @@ export default function AuctionDetails({
             value={createAuctionState?.productName}
             onChange={handleChange}
             required={true}
+            validationRegex="^(?! )[a-zA-Z0-9 ]*$"
           />
         </Col>
         <Col md={6}>
@@ -45,6 +46,7 @@ export default function AuctionDetails({
             value={createAuctionState?.basePrice}
             onChange={handleChange}
             required={true}
+            validationRegex="^[1-9][0-9]*$"
           />
         </Col>
       </Row>

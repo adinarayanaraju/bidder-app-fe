@@ -125,7 +125,9 @@ export default function AuctionPhotos({
                 </div>
               </div>
               <p className="single-photo-name m-0 mb-1 ">{item?.fileName}</p>
-              <p className="single-photo-size m-0">{item?.size}</p>
+              <p className="single-photo-size m-0">
+                {(item?.size / (1024 * 1024)).toFixed(2)} MB
+              </p>
             </div>
           ))}
         </div>
