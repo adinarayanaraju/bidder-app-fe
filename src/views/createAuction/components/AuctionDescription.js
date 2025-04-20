@@ -15,8 +15,8 @@ export default function AuctionDescription({
     <div className="auction-description-wrapper">
       <CustomEditor
         label="Description"
-        name="category"
-        value={createAuctionState?.category}
+        name="description"
+        value={createAuctionState?.description}
         onChange={handleAuctionDescription}
         required={true}
         placeholder="Enter the detailed description...."
