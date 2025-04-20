@@ -12,6 +12,7 @@ import Loader from "../../../sharedComponents/loader/Loader";
 import { mapToSelectOptions } from "../../../utils/commonFunction";
 import AuctionDescription from "./AuctionDescription";
 import AuctionPhotos from "./AuctionPhotos";
+import AuctionPreview from "./AuctionPreview";
 
 export default function AuctionIndex() {
   const [activeStep, setActiveStep] = useState(0);
@@ -22,6 +23,7 @@ export default function AuctionIndex() {
     endDate: "",
     category: "",
     photos: [],
+    description:""
   });
   const createAuctionStep = [
     {
@@ -127,8 +129,15 @@ export default function AuctionIndex() {
 
         {activeStep === 2 && (
           <AuctionPhotos
-          createAuctionState={createAuctionState}
+            createAuctionState={createAuctionState}
             setCreateAuctionState={setCreateAuctionState}
+          />
+        )}
+
+        {activeStep === 3 && (
+          <AuctionPreview
+            createAuctionState={createAuctionState}
+            handelEditClick={handleStepClick}
           />
         )}
 

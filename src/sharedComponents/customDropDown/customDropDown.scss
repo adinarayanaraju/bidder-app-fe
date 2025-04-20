@@ -47,6 +47,30 @@
     }
   }
 
+  .custom-select__menu {
+    background-color: white;
+    color: black;
+  }
+
+  .custom-select__option {
+    color: black;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      color: black;
+    }
+
+    &--is-selected {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: black;
+    }
+
+    &--is-focused {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: black;
+    }
+  }
+
   .error {
     font-size: 12px;
     color: red;

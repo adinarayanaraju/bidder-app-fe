@@ -68,7 +68,7 @@ export default function AuctionDetails({
             onChange={handleCategoryAndDateChange}
             placeholder="Pick start date"
             required
-            mode="range"
+            mode="single"
             format="DD/MM/YYYY hh:mm A"
             minDate={new Date()}
             withTime
