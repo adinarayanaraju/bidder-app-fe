@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { getAuctionCategoryLIst } from "../../../redux/slices/auctionSlice";
 import { useSelector } from "react-redux";
 import Loader from "../../../sharedComponents/loader/Loader";
-import { mapToSelectOptions } from "../../../utils/commonFunction";
+import { htmlToText, mapToSelectOptions } from "../../../utils/commonFunction";
 import AuctionDescription from "./AuctionDescription";
 import AuctionPhotos from "./AuctionPhotos";
 import AuctionPreview from "./AuctionPreview";
@@ -23,7 +23,7 @@ export default function AuctionIndex() {
     endDate: "",
     category: "",
     photos: [],
-    description:""
+    description: "",
   });
   const createAuctionStep = [
     {
@@ -58,22 +58,34 @@ export default function AuctionIndex() {
   const isStepValid = (stepIndex) => {
     switch (stepIndex) {
       case 0:
-        return true;
+        return (
+          createAuctionState?.productName &&
+          createAuctionState?.basePrice &&
+          createAuctionState?.category &&
+          createAuctionState?.startDate &&
+          createAuctionState?.endDate
+        );
       case 1:
-        return true;
+        return (
+          isStepValid(0) &&
+          htmlToText(createAuctionState?.description || "").trim().length > 0
+        );
       case 2:
-        return isStepValid(0) && isStepValid(1);
+        return isStepValid(1) && createAuctionState?.photos?.length >= 3;
+
+      case 3:
+        return isStepValid(2);
       default:
         return false;
     }
   };
 
   const isStepCompleted = (index) => {
-    return index < activeStep || (index === activeStep && isStepValid(index));
+    return index < activeStep || isStepValid(index);
   };
 
   const handleStepClick = (index) => {
-    if (index === 0 || isStepValid(index)) {
+    if (index === 0 || isStepValid(index - 1)) {
       setActiveStep(index);
     }
   };
@@ -95,6 +107,8 @@ export default function AuctionIndex() {
       [name]: value,
     }));
   };
+
+  const handleSubmit = () => {};
 
   return (
     <div>
@@ -147,11 +161,17 @@ export default function AuctionIndex() {
             Previous
           </button>
           <button
-            onClick={handleNext}
+            onClick={() => {
+              if (activeStep === createAuctionStep?.length - 1) {
+                handleSubmit();
+              } else {
+                handleNext();
+              }
+            }}
             disabled={!isStepValid(activeStep)}
             className="next-btn"
           >
-            Next
+            {activeStep === createAuctionStep?.length - 1 ? "Submit" : "Next"}
           </button>
         </div>
       </div>

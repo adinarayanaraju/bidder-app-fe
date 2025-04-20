@@ -3,6 +3,7 @@ import "./customEditor.scss";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { FormGroup, Label } from "reactstrap";
+import { htmlToText } from "../../utils/commonFunction";
 
 export default function CustomEditor({
   label,
@@ -21,9 +22,7 @@ export default function CustomEditor({
   const lastContentRef = useRef(value || "");
 
   useEffect(() => {
-    const temp = document.createElement("div");
-    temp.innerHTML = value || "";
-    const text = temp.innerText || "";
+    const text = htmlToText(value)
     setCharCount(text.length);
   }, [value]);
 

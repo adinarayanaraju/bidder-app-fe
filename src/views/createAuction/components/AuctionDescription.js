@@ -20,7 +20,7 @@ export default function AuctionDescription({
         onChange={handleAuctionDescription}
         required={true}
         placeholder="Enter the detailed description...."
-        maxLength={20}
+        maxLength={500}
       />
     </div>
   );
