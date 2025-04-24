@@ -13,6 +13,7 @@ import Header from "./views/header/Header";
 import Home from "./views/home/Home";
 import AuctionDetails from "./views/auctionDetails/AuctionDetails";
 import CreateAuction from "./views/createAuction/CreateAuction";
+import ProtectedRoute from "./ProtectedRoute";
 function App() {
   return (
     <>
@@ -38,7 +39,14 @@ function App() {
             path={`${routeConstants.AUCTION_DETAIL}/:auction_id`}
             element={<AuctionDetails />}
           />
-          <Route path={routeConstants.AUCTION_CREATE} element={<CreateAuction />} />
+
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute allowedRoles={["admin","super-admin"]} />}>
+            <Route
+              path={routeConstants.AUCTION_CREATE}
+              element={<CreateAuction />}
+            />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
