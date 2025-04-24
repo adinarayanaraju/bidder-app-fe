@@ -6,7 +6,10 @@ import mouseIcon from "./../../../assets/icons/mouse.svg";
 import CustomStepper from "./../../../sharedComponents/customStepper/CustomStepper";
 import AuctionDetails from "./AuctionDetails";
 import { useDispatch } from "react-redux";
-import { getAuctionCategoryLIst } from "../../../redux/slices/auctionSlice";
+import {
+  createAuction,
+  getAuctionCategoryLIst,
+} from "../../../redux/slices/auctionSlice";
 import { useSelector } from "react-redux";
 import Loader from "../../../sharedComponents/loader/Loader";
 import { htmlToText, mapToSelectOptions } from "../../../utils/commonFunction";
@@ -108,7 +111,32 @@ export default function AuctionIndex() {
     }));
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        item_name: createAuctionState?.productName,
+        base_price: createAuctionState?.basePrice,
+        description: createAuctionState?.description,
+        start_date: createAuctionState?.startDate,
+        end_date: createAuctionState?.endDate,
+        category_id: createAuctionState?.category?.value,
+        images: createAuctionState?.photos,
+      };
+      await dispatch(createAuction(payload)).unwrap();
+      setCreateAuctionState({
+        productName: "",
+        basePrice: "",
+        startDate: "",
+        endDate: "",
+        category: "",
+        photos: [],
+        description: "",
+      });
+      setActiveStep(0);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>

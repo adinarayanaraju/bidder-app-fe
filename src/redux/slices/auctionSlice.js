@@ -119,6 +119,34 @@ export const getAuctionCategoryLIst = createAsyncThunk(
   }
 );
 
+export const createAuction = createAsyncThunk(
+  "auction/createAuction",
+  async (payload, thunkApi) => {
+    try {
+      const response = await POST(API_END_POINT.CREATE_AUCTION, payload);
+      if (response?.status === 200) {
+        showToast(
+          response?.response?.data?.message || SUCCESS_MESSAGE.CREATED_AUCTION, "success"
+        );
+        return response?.response?.data?.data;
+      } else {
+        showToast(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+          "error"
+        );
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const auctionSlice = createSlice({
   name: "auction",
   initialState: auctionInitialState,
@@ -170,6 +198,16 @@ export const auctionSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
         state.auctionCategoryList = [];
+      })
+      .addCase(createAuction.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createAuction.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(createAuction.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });

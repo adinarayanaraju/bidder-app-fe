@@ -4,7 +4,8 @@ export const ERROR_MESSAGE = {
 
 export const SUCCESS_MESSAGE = {
   PASSWORD_UPDATED: "Password Updated Successfully",
-  BID_PLACE: "Bid place successfully"
+  BID_PLACE: "Bid place successfully",
+  CREATED_AUCTION:"Auction created successfully"
 };
 
 export const CONSTANT_NAME = {
