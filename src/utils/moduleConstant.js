@@ -1,4 +1,5 @@
 export const modulePath = {
   AUTH: "/auth",
-  AUCTION: "/auction"
+  AUCTION: "/auction",
+  PERMISSION:"/permission-denied"
 };
