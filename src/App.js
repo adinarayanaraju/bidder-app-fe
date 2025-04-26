@@ -14,6 +14,7 @@ import Home from "./views/home/Home";
 import AuctionDetails from "./views/auctionDetails/AuctionDetails";
 import CreateAuction from "./views/createAuction/CreateAuction";
 import ProtectedRoute from "./ProtectedRoute";
+import AuctionList from "./views/auctionList/AuctionList";
 function App() {
   return (
     <>
@@ -38,6 +39,10 @@ function App() {
           <Route
             path={`${routeConstants.AUCTION_DETAIL}/:auction_id`}
             element={<AuctionDetails />}
+          />
+           <Route
+            path={`${routeConstants.AUCTION_LIST}`}
+            element={<AuctionList />}
           />
 
           {/* Protected routes */}
