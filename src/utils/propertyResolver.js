@@ -17,3 +17,8 @@ export const CONSTANT_NAME = {
 export const USER_ROLE = {
   USER: 1,
 };
+
+export const PAGINATION_CONSTANT = {
+  PAGE_ONE: 1,
+  PER_PAGE_LIMIT: 10
+}

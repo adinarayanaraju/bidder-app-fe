@@ -2,7 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GET, POST } from "../../services/axiosRequestHandler";
 import { API_END_POINT } from "../../utils/apiEndPoints";
 import { showToast } from "../../sharedComponents/toast/showTaost";
-import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../utils/propertyResolver";
+import {
+  ERROR_MESSAGE,
+  PAGINATION_CONSTANT,
+  SUCCESS_MESSAGE,
+} from "../../utils/propertyResolver";
 
 const auctionInitialState = {
   isLoading: false,
@@ -10,6 +14,11 @@ const auctionInitialState = {
   auctionOnHome: [],
   auctionDetail: null,
   auctionCategoryList: [],
+  auctionListInfo: {
+    totalCount: 0,
+    data: [],
+    hasMore: false,
+  },
 };
 
 export const getAuctionListForHome = createAsyncThunk(
@@ -126,7 +135,8 @@ export const createAuction = createAsyncThunk(
       const response = await POST(API_END_POINT.CREATE_AUCTION, payload);
       if (response?.status === 200) {
         showToast(
-          response?.response?.data?.message || SUCCESS_MESSAGE.CREATED_AUCTION, "success"
+          response?.response?.data?.message || SUCCESS_MESSAGE.CREATED_AUCTION,
+          "success"
         );
         return response?.response?.data?.data;
       } else {
@@ -142,6 +152,52 @@ export const createAuction = createAsyncThunk(
       }
     } catch (error) {
       showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getAuctionList = createAsyncThunk(
+  "auction/getAuctionList",
+  async (payload, thunkApi) => {
+    try {
+      const response = await GET(
+        `${API_END_POINT.GET_AUCTION_LIST}?page=${payload?.page}&limit=${payload?.limit}`
+      );
+      if (response?.status === 200) {
+        // Getting api response
+        const totalCount =
+          response?.response?.data?.data?.pagination?.total || 0;
+        const newData = response?.response?.data?.data?.auctions || [];
+
+        // Getting current data and page
+        const state = thunkApi.getState();
+        const currentPage = payload?.page || 1;
+        const currentData = state?.auction?.auctionListInfo?.data || [];
+
+        const moreCount =
+          currentPage === PAGINATION_CONSTANT.PAGE_ONE
+            ? [...newData]?.length
+            : [...currentData, ...newData]?.length;
+
+        return {
+          totalCount: totalCount,
+          data:
+            currentPage === PAGINATION_CONSTANT.PAGE_ONE
+              ? [...newData]
+              : [...currentData, ...newData],
+          hasMore: moreCount < totalCount,
+        };
+      } else {
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      if (error?.response?.status !== 404) {
+        showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      }
       return thunkApi.rejectWithValue(error.message);
     }
   }
@@ -208,6 +264,22 @@ export const auctionSlice = createSlice({
       .addCase(createAuction.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      })
+      .addCase(getAuctionList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAuctionList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.auctionListInfo = action.payload;
+      })
+      .addCase(getAuctionList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.auctionListInfo = {
+          totalCount: 0,
+          data: [],
+          hasMore: false,
+        };
       });
   },
 });
