@@ -5,7 +5,7 @@ import makeAnimated from "react-select/animated";
 import "./customDropDown.scss";
 const animatedComponents = makeAnimated();
 
-export default function customDropDown({
+export default function CustomDropDown({
   label,
   name,
   value,

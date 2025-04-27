@@ -67,13 +67,17 @@ export default function AuctionList() {
       <Row className="mt-4">
         {/* Filter section */}
         <Col lg={2} md={4} sm={12}>
-          <AuctionListFilter />
+          <AuctionListFilter
+            filterState={filterState}
+            setFilterState={setFilterState}
+            setPage={setPage}
+          />
         </Col>
 
         {/* Auction Card and Sorting */}
         <Col lg={10} md={8} sm={12}>
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h2 className="ongoing-heading">Ongoing Auction</h2>
+            <h2 className="heading-text">Ongoing Auction</h2>
             <div className="d-flex">
               <label className="me-2">Sort by:</label>
               {/* Replace this with an actual dropdown */}
