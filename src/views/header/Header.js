@@ -27,7 +27,7 @@ export default function Header() {
     },
     {
       id: 2,
-      path: "/auctions",
+      path: routeConstants.AUCTION_LIST,
       label: "Auctions",
     },
     {

@@ -9,30 +9,55 @@ import AuctionListFilter from "./components/AuctionListFilter";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuctionList } from "../../redux/slices/auctionSlice";
 import { PAGINATION_CONSTANT } from "../../utils/propertyResolver";
+import Loader from "../../sharedComponents/loader/Loader";
 
 export default function AuctionList() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
   const [perPageLimit, setPerPageLimit] = useState(
     PAGINATION_CONSTANT.PER_PAGE_LIMIT
   );
-  const { auctionListInfo } = useSelector((state) => state.auction);
+  const [filterState, setFilterState] = useState({
+    sortBy: "asc",
+    selectedCategory: "",
+    rangeValue: [0, 0],
+  });
+  const { auctionListInfo, isLoading } = useSelector((state) => state.auction);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const payload = {
       page: page,
       limit: perPageLimit,
+      sortBy: filterState.sortBy,
+      ...(filterState.selectedCategory?.value && {
+        categoryId: filterState.selectedCategory?.value,
+      }),
+      ...(filterState.rangeValue[0] && {
+        minPrice: filterState.rangeValue[0],
+      }),
+      ...(filterState.rangeValue[1] !== 0 && {
+        maxPrice: filterState.rangeValue[1],
+      }),
     };
     dispatch(getAuctionList(payload));
-  }, [page, perPageLimit]);
+  }, [page, perPageLimit, filterState]);
 
   const fetchMoreData = () => {
     if (auctionListInfo?.hasMore) {
       setPage((prev) => prev + 1);
     }
   };
+
+  const handleFilterChange = (value) => {
+    setFilterState({
+      ...filterState,
+      sortBy: value,
+    });
+    setPage(PAGINATION_CONSTANT.PAGE_ONE);
+  };
   return (
     <div className="auction-list-wrapper p-4">
+      {isLoading && <Loader />}
       <CustomBreadCrumb
         items={[
           { name: "Home", route: routeConstants.HOME_PAGE },
@@ -53,9 +78,9 @@ export default function AuctionList() {
               <label className="me-2">Sort by:</label>
               {/* Replace this with an actual dropdown */}
               <div className="auction-sort-dropdown">
-                <select>
-                  <option value="asc">Asc</option>
-                  <option value="desc">Desc</option>
+                <select onChange={(e) => handleFilterChange(e.target.value)}>
+                  <option value="asc">Newest First</option>
+                  <option value="desc">Oldest First</option>
                 </select>
               </div>
             </div>

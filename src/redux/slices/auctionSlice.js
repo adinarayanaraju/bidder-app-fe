@@ -161,8 +161,25 @@ export const getAuctionList = createAsyncThunk(
   "auction/getAuctionList",
   async (payload, thunkApi) => {
     try {
+      // Build Query parameter dynamically
+      const queryParams = new URLSearchParams({
+        page: payload.page,
+        limit: payload.limit,
+        sortBy: payload.sortBy,
+      });
+      
+      if (payload.minPrice) {
+        queryParams.append("minPrice", payload.minPrice);
+      }
+      if (payload.maxPrice) {
+        queryParams.append("maxPrice", payload.maxPrice);
+      }
+      if (payload.categoryId) {
+        queryParams.append("categoryId", payload.categoryId);
+      }
+
       const response = await GET(
-        `${API_END_POINT.GET_AUCTION_LIST}?page=${payload?.page}&limit=${payload?.limit}`
+        `${API_END_POINT.GET_AUCTION_LIST}?${queryParams.toString()}`
       );
       if (response?.status === 200) {
         // Getting api response

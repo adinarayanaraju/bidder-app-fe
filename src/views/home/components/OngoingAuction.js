@@ -4,13 +4,19 @@ import { Col, Row } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuctionListForHome } from "../../../redux/slices/auctionSlice";
 import Loader from "../../../sharedComponents/loader/Loader";
+import { useNavigate } from "react-router-dom";
+import { routeConstants } from "../../../utils/routeConstant";
 
 export default function OngoingAuction() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { auctionOnHome, isLoading } = useSelector((state) => state.auction);
   useEffect(() => {
     dispatch(getAuctionListForHome());
   }, []);
+  const handleViewAll = ()=>{
+    navigate(routeConstants.AUCTION_LIST)
+  }
   return (
     <div className="ongoing-auction-wrapper">
       {
@@ -31,7 +37,7 @@ export default function OngoingAuction() {
         </Row>
       </div>
       <div className="view-all-btn text-center">
-        <button>View All</button>
+        <button onClick={handleViewAll}>View All</button>
       </div>
     </div>
   );
