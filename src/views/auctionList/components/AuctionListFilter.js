@@ -51,11 +51,22 @@ export default function AuctionListFilter({
     });
     setPage(PAGINATION_CONSTANT.PAGE_ONE);
   };
+  const isFilterBtnEnable =
+    localValues[0] > 0 || localValues[1] > 0 || localCategory?.value;
+  const filterCount = [
+    filterState.rangeValue[0] !== 0 || filterState.rangeValue[1] !== 0 ? 1 : 0,
+    filterState.selectedCategory ? 1 : 0,
+  ].reduce((a, b) => a + b, 0);
   return (
     <div className="auction-filter-wrapper">
       {/* Filter header */}
       <div className="d-flex justify-content-between align-items-center mb-2">
-        <h1 className="heading-text">Filter</h1>
+        <h1 className="heading-text">
+          Filter
+          {filterCount > 0 && (
+            <span className="filter-count">{filterCount}</span>
+          )}
+        </h1>
         <img src={filterIcon} alt="filter icon" />
       </div>
       <hr className="m-0 mb-3" />
@@ -152,8 +163,12 @@ export default function AuctionListFilter({
 
       {/* Filter buttons */}
       <div className="filter-btn mt-4">
-        <button onClick={handleApplyFilter}>Apply Filter</button>
-        <button onClick={handleResetFilter}>Reset Filter</button>
+        <button onClick={handleApplyFilter} disabled={!isFilterBtnEnable}>
+          Apply Filter
+        </button>
+        <button onClick={handleResetFilter} disabled={filterCount === 0}>
+          Reset Filter
+        </button>
       </div>
     </div>
   );
