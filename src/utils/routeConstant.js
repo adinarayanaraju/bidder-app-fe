@@ -11,5 +11,5 @@ export const routeConstants = {
   AUCTION_CREATE: `${modulePath.AUCTION}/create`,
   PERMISSION_DENIED: `${modulePath.PERMISSION}`,
   AUCTION_LIST: `${modulePath.AUCTION}`,
-
+  USER_PROFILE: `${modulePath.USER}/profile`,
 };

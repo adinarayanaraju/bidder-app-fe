@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAuctionList } from "../../redux/slices/auctionSlice";
 import { PAGINATION_CONSTANT } from "../../utils/propertyResolver";
 import Loader from "../../sharedComponents/loader/Loader";
+import NoRecord from "../../sharedComponents/noRecord/NoRecord";
 
 export default function AuctionList() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
@@ -103,6 +104,11 @@ export default function AuctionList() {
                 ))}
               </Row>
             </InfiniteScroller>
+          )}
+          {auctionListInfo?.data?.length === 0 && !isLoading && (
+            <div style={{ height: "500px" }}>
+              <NoRecord />
+            </div>
           )}
         </Col>
       </Row>

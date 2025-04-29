@@ -51,6 +51,10 @@ export default function Header() {
     navigate(routeConstants.HOME_PAGE);
   };
 
+  const handleUserIconClick = () => {
+    navigate(routeConstants.USER_PROFILE);
+  };
+
   return (
     <>
       <header className="header">
@@ -86,7 +90,12 @@ export default function Header() {
                   alt="notification"
                   className="icon"
                 />
-                <img src={userIcon} alt="user login" className="icon" />
+                <img
+                  src={userIcon}
+                  alt="user login"
+                  className="icon"
+                  onClick={handleUserIconClick}
+                />
               </>
             )}
             {isUserLogin ? (
