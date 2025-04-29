@@ -11,7 +11,9 @@ export const SUCCESS_MESSAGE = {
 export const CONSTANT_NAME = {
   PLACE_YOUR_BID: "Place your bid",
   AUCTION_PHOTO_MAX_SIZE : 25 * 1024 * 1024, //25MB,
-  AUCTION_PHOTO_VALIDATION: ["image/jpeg", "image/jpg", "image/png"]
+  AUCTION_PHOTO_VALIDATION: ["image/jpeg", "image/jpg", "image/png"],
+  PROFILE_PHOTO_MAX_SIZE : 25 * 1024 * 1024, //25MB,
+  PROFILE_PHOTO_VALIDATION: ["image/jpeg", "image/jpg", "image/png"]
 };
 
 export const USER_ROLE = {
