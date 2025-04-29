@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { routeConstants } from "../../../utils/routeConstant";
 import { CONSTANT_NAME, ERROR_MESSAGE } from "../../../utils/propertyResolver";
 import { showToast } from "../../../sharedComponents/toast/showTaost";
+import CustomAvatar from "../../../sharedComponents/customAvatar/CustomAvatar";
 export default function UserHeader() {
   const navigate = useNavigate();
   const inputRef = useRef(null);
@@ -46,7 +47,8 @@ export default function UserHeader() {
     <div className="user-header-wrapper p-4">
       <div className="d-flex justify-content-between align-items-center header-bg p-4">
         <div className="profile-pic-wrapper" onClick={handleFileClick}>
-          <img src={userProfile} alt="User Profile" className="profile-pic" />
+          {/* <img src={userProfile} alt="User Profile" className="profile-pic" /> */}
+          <CustomAvatar firstName={"Vivek"} lastName={"Kumar"} />
           <div className="overlay">
             <FaCamera className="camera-icon" />
           </div>
