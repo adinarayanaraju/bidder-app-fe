@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import "./userSidebar.scss";
 import { FaHome, FaGavel, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/slices/authSlice";
+import { routeConstants } from "../../../utils/routeConstant";
+import ConfirmModal from "../../../sharedComponents/confirmModal/ConfirmModal";
+
 export default function UserSidebar() {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: <FaHome /> },
@@ -10,6 +16,17 @@ export default function UserSidebar() {
     { id: "logout", label: "Logout", icon: <FaSignOutAlt /> },
   ];
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const toggleModal = () => setModalOpen((prev) => !prev);
+  const handleConfirm = () => {
+    dispatch(logout());
+    toggleModal();
+    navigate(routeConstants.SIGN_IN);
+  };
   return (
     <div className="user-sidebar-wrapper p-4 pt-2">
       <div className="sidebar-card">
@@ -19,6 +36,10 @@ export default function UserSidebar() {
             <div
               key={item.id}
               onClick={() => {
+                if (item.id === "logout") {
+                  toggleModal();
+                  return;
+                }
                 setActiveTab(item.id);
               }}
               className={`menu-item ${activeTab === item.id ? "active" : ""}`}
@@ -32,6 +53,18 @@ export default function UserSidebar() {
       <div className="content">
         {activeTab === "dashboard" && <h1>Dashboard components</h1>}
       </div>
+      {modalOpen && (
+        <ConfirmModal
+          isOpen={modalOpen}
+          toggle={toggleModal}
+          title="Logout Confirmation"
+          message="Are you sure want to logout?"
+          confirmText="Yes"
+          cancelText="Cancel"
+          isWarningIconShow={true}
+          onConfirm={handleConfirm}
+        />
+      )}
     </div>
   );
 }
