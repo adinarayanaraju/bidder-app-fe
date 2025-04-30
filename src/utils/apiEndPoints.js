@@ -9,5 +9,6 @@ export const API_END_POINT = {
   BID_APPLY: "/bid/create",
   GET_AUCTION_CATEGORY_LIST:"/auction-category",
   GET_PRESIGNED_URL:"/aws/get-presigned-url",
-  CREATE_AUCTION:"/auction/create"
+  CREATE_AUCTION:"/auction/create",
+  MY_AUCTION_LIST: "/auction/my-auction"
 };

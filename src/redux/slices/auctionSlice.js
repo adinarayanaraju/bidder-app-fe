@@ -19,6 +19,10 @@ const auctionInitialState = {
     data: [],
     hasMore: false,
   },
+  myAuctionList: {
+    data: [],
+    totalRecord: 0,
+  },
 };
 
 export const getAuctionListForHome = createAsyncThunk(
@@ -167,7 +171,7 @@ export const getAuctionList = createAsyncThunk(
         limit: payload.limit,
         sortBy: payload.sortBy,
       });
-      
+
       if (payload.minPrice) {
         queryParams.append("minPrice", payload.minPrice);
       }
@@ -215,6 +219,38 @@ export const getAuctionList = createAsyncThunk(
       if (error?.response?.status !== 404) {
         showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
       }
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getMyAuctionList = createAsyncThunk(
+  "auction/getMyAuctionList",
+  async (payload, thunkApi) => {
+    try {
+      // Build Query parameter dynamically
+      const queryParams = new URLSearchParams(payload);
+      const response = await GET(
+        `${API_END_POINT.MY_AUCTION_LIST}?${queryParams.toString()}`
+      );
+      if (response?.status === 200) {
+        return {
+          data: response?.response?.data?.data?.auctions || [],
+          totalRecord: response?.response?.data?.data?.pagination?.total || 0,
+        };
+      } else {
+        showToast(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+          "error"
+        );
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
       return thunkApi.rejectWithValue(error.message);
     }
   }
@@ -296,6 +332,21 @@ export const auctionSlice = createSlice({
           totalCount: 0,
           data: [],
           hasMore: false,
+        };
+      })
+      .addCase(getMyAuctionList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getMyAuctionList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.myAuctionList = action.payload;
+      })
+      .addCase(getMyAuctionList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.myAuctionList = {
+          data: [],
+          totalRecord: 0,
         };
       });
   },
