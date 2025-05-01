@@ -113,6 +113,7 @@ export default function MyAuctionList() {
     if (type === "view") {
       navigate(`${routeConstants.AUCTION_DETAIL}/${id}`);
     } else {
+      navigate(`${routeConstants.AUCTION_UPDATE}/${id}`);
     }
   };
   return (
