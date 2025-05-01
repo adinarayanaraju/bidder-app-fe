@@ -17,7 +17,7 @@ import AuctionDescription from "./AuctionDescription";
 import AuctionPhotos from "./AuctionPhotos";
 import AuctionPreview from "./AuctionPreview";
 
-export default function AuctionIndex() {
+export default function AuctionIndex({ auctionData }) {
   const [activeStep, setActiveStep] = useState(0);
   const [createAuctionState, setCreateAuctionState] = useState({
     productName: "",
@@ -56,6 +56,23 @@ export default function AuctionIndex() {
   useEffect(() => {
     dispatch(getAuctionCategoryLIst());
   }, []);
+
+  useEffect(() => {
+    setCreateAuctionState({
+      productName: auctionData?.item_name || "",
+      basePrice: auctionData?.base_price || "",
+      startDate: auctionData?.start_date || "",
+      endDate: auctionData?.end_date || "",
+      category: auctionData?.category
+        ? {
+            id: auctionData?.category?.id,
+            label: auctionData?.category?.name,
+          }
+        : "",
+      photos: auctionData?.images || [],
+      description: auctionData?.description || "",
+    });
+  }, [auctionData]);
 
   //   Validation for each step
   const isStepValid = (stepIndex) => {
@@ -199,7 +216,11 @@ export default function AuctionIndex() {
             disabled={!isStepValid(activeStep)}
             className="next-btn"
           >
-            {activeStep === createAuctionStep?.length - 1 ? "Submit" : "Next"}
+            {activeStep === createAuctionStep?.length - 1
+              ? auctionData
+                ? "Update"
+                : "Submit"
+              : "Next"}
           </button>
         </div>
       </div>
