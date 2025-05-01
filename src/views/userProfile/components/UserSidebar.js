@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../../redux/slices/authSlice";
 import { routeConstants } from "../../../utils/routeConstant";
 import ConfirmModal from "../../../sharedComponents/confirmModal/ConfirmModal";
+import MyAuctionList from "./MyAuctionList";
 
 export default function UserSidebar() {
   const menuItems = [
@@ -52,6 +53,7 @@ export default function UserSidebar() {
       </div>
       <div className="content">
         {activeTab === "dashboard" && <h1>Dashboard components</h1>}
+        {activeTab === "auctionList" && <MyAuctionList />}
       </div>
       {modalOpen && (
         <ConfirmModal

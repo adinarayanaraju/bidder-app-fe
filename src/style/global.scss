@@ -49,7 +49,6 @@ label {
   }
 }
 
-
 // Button Styles
 .custom-button {
   width: 100%;
@@ -113,4 +112,20 @@ label {
 
 .error {
   color: red;
+}
+
+.icon-hover {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.icon-hover.view:hover {
+  color: #3b82f6;
+}
+
+.icon-hover.edit:hover {
+  color: #22c55e;
+}
+.icon-hover.delete:hover {
+  color: #ef4444;
 }
