@@ -2,10 +2,12 @@
   display: flex;
   .sidebar-card {
     width: 250px;
+    max-height: 300px;
     padding: 20px;
     border: 1px solid #ddd;
     box-shadow: 0 0 20px 10px #5f2ded05;
     border-radius: 20px;
+    background-color: #fff;
   }
 
   .welcome-text {
@@ -42,6 +44,6 @@
 
   .content {
     flex: 1;
-    padding: 20px;
+    margin-left: 20px;
   }
 }
