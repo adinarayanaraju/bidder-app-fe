@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { GET, POST } from "../../services/axiosRequestHandler";
+import { GET, POST, PUT } from "../../services/axiosRequestHandler";
 import { API_END_POINT } from "../../utils/apiEndPoints";
 import { showToast } from "../../sharedComponents/toast/showTaost";
 import {
@@ -256,6 +256,40 @@ export const getMyAuctionList = createAsyncThunk(
   }
 );
 
+export const updateAuction = createAsyncThunk(
+  "auction/updateAuction",
+  async (payload, thunkApi) => {
+    try {
+      const state = thunkApi.getState();
+      const auctionId = state?.auction?.auctionDetail?.id;
+      const response = await PUT(
+        `${API_END_POINT.UPDATE_AUCTION}/${auctionId}`,
+        payload
+      );
+      if (response?.status === 200) {
+        showToast(
+          response?.response?.data?.message || SUCCESS_MESSAGE.UPDATED_AUCTION,
+          "success"
+        );
+        return response?.response?.data?.data;
+      } else {
+        showToast(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+          "error"
+        );
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const auctionSlice = createSlice({
   name: "auction",
   initialState: auctionInitialState,
@@ -348,6 +382,16 @@ export const auctionSlice = createSlice({
           data: [],
           totalRecord: 0,
         };
+      })
+      .addCase(updateAuction.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateAuction.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(updateAuction.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
