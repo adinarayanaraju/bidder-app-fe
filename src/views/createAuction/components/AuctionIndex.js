@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import {
   createAuction,
   getAuctionCategoryLIst,
+  updateAuction,
 } from "../../../redux/slices/auctionSlice";
 import { useSelector } from "react-redux";
 import Loader from "../../../sharedComponents/loader/Loader";
@@ -65,7 +66,7 @@ export default function AuctionIndex({ auctionData }) {
       endDate: auctionData?.end_date || "",
       category: auctionData?.category
         ? {
-            id: auctionData?.category?.id,
+            value: auctionData?.category?.id,
             label: auctionData?.category?.name,
           }
         : "",
@@ -139,6 +140,9 @@ export default function AuctionIndex({ auctionData }) {
         category_id: createAuctionState?.category?.value,
         images: createAuctionState?.photos,
       };
+      if (auctionData) {
+        return dispatch(updateAuction(payload));
+      }
       await dispatch(createAuction(payload)).unwrap();
       setCreateAuctionState({
         productName: "",
