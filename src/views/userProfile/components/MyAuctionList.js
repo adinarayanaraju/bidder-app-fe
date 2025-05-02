@@ -14,12 +14,16 @@ import { useNavigate } from "react-router-dom";
 import { routeConstants } from "../../../utils/routeConstant";
 import Loader from "../../../sharedComponents/loader/Loader";
 import NoRecord from "../../../sharedComponents/noRecord/NoRecord";
+import ConfirmModal from "../../../sharedComponents/confirmModal/ConfirmModal";
 
 export default function MyAuctionList() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
   const [perPageLimit, setPerPageLimit] = useState(
     PAGINATION_CONSTANT.PER_PAGE_LIMIT
   );
+  const [isConfirmationShow, setIsConfirmationShow] = useState(false);
+  const [deleteSelectedRow, setDeleteSelectedRow] = useState("");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { myAuctionList, isLoading } = useSelector((state) => state.auction);
@@ -91,7 +95,14 @@ export default function MyAuctionList() {
               title="Edit"
               onClick={() => handleRedirection(row?.id, "edit")}
             />
-            <FaTrash className="icon-hover delete" title="Delete" />
+            <FaTrash
+              className="icon-hover delete"
+              title="Delete"
+              onClick={() => {
+                setIsConfirmationShow(true);
+                setDeleteSelectedRow(row);
+              }}
+            />
           </div>
         );
       },
@@ -116,6 +127,10 @@ export default function MyAuctionList() {
       navigate(`${routeConstants.AUCTION_UPDATE}/${id}`);
     }
   };
+
+  const handleDelete = () => {};
+
+  const toggleModal = () => setIsConfirmationShow(!isConfirmationShow);
   return (
     <div>
       {isLoading && <Loader />}
@@ -141,6 +156,18 @@ export default function MyAuctionList() {
           </div>
         )}
       </div>
+      {isConfirmationShow && (
+        <ConfirmModal
+          isOpen={isConfirmationShow}
+          toggle={toggleModal}
+          title="Confirm Action"
+          message={`Are you sure you want to delete "${deleteSelectedRow?.item_name}" record?`}
+          isWarningIconShow={true}
+          confirmText="Yes, Confirm"
+          cancelText="Cancel"
+          onConfirm={handleDelete}
+        />
+      )}
     </div>
   );
 }
