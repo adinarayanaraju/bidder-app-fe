@@ -51,9 +51,7 @@ export default function MultiSelectionFilter({
     setSelected([]);
   };
 
-  const isSelected = (option) => {
-    return true;
-  };
+  const isSelected = (option) => selected?.some((item)=> item?.value === option?.value);
 
   const isAllSelected = selected?.length === options?.length;
   
@@ -70,7 +68,7 @@ export default function MultiSelectionFilter({
             <span className="selected-filter-counter">{value?.length}</span>
           )}
         </DropdownToggle>
-        <DropdownMenu className="filter-dropdown-men">
+        <DropdownMenu className="filter-dropdown-menu">
           <div className="filter-list-wrapper">
             <div className="form-check d-flex align-items-center cursor-pointer">
               <Input
@@ -81,13 +79,14 @@ export default function MultiSelectionFilter({
                 onChange={handleSelectAllToggle}
                 checked={isAllSelected}
               />
-              <label htmlFor={option?.value}>{option?.label}</label>
+              <label htmlFor={"selectAll"} className="form-check-label">{isAllSelected ? "Deselect All" : "Select All"}</label>
             </div>
             <div className="checkbox-list">
               {options?.map((option) => (
                 <DropdownItem
                   className="px-0 drop-down-item"
                   key={option?.value}
+                  toggle={false}
                 >
                   <div className="form-check d-flex align-items-center">
                     <Input
@@ -98,7 +97,7 @@ export default function MultiSelectionFilter({
                       onChange={() => handleChange(option)}
                       checked={isSelected(option)}
                     />
-                    <label htmlFor={option?.value}>{option?.label}</label>
+                    <label htmlFor={option?.value} className="form-check-label">{option?.label}</label>
                   </div>
                 </DropdownItem>
               ))}

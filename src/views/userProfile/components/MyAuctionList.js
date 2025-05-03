@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { PAGINATION_CONSTANT } from "../../../utils/propertyResolver";
 import {
   deleteAuction,
+  getAuctionCategoryLIst,
   getMyAuctionList,
 } from "../../../redux/slices/auctionSlice";
 import CustomTable from "../../../sharedComponents/customTable/CustomTable";
@@ -10,6 +11,7 @@ import {
   capitalizeFirstChar,
   formatDate,
   htmlToText,
+  mapToSelectOptions,
   truncateText,
 } from "../../../utils/commonFunction";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
@@ -18,6 +20,8 @@ import { routeConstants } from "../../../utils/routeConstant";
 import Loader from "../../../sharedComponents/loader/Loader";
 import NoRecord from "../../../sharedComponents/noRecord/NoRecord";
 import ConfirmModal from "../../../sharedComponents/confirmModal/ConfirmModal";
+import MultiSelectionFilter from "../../../sharedComponents/multiSelectionFilter/MultiSelectionFilter";
+import { Col, Row } from "reactstrap";
 
 export default function MyAuctionList() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
@@ -26,11 +30,18 @@ export default function MyAuctionList() {
   );
   const [isConfirmationShow, setIsConfirmationShow] = useState(false);
   const [deleteSelectedRow, setDeleteSelectedRow] = useState("");
+  const [filterState, setFilterState] = useState({
+    categories: [],
+  });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { myAuctionList, isLoading } = useSelector((state) => state.auction);
+  const { auctionCategoryList } = useSelector((state) => state.auction);
 
+  useEffect(() => {
+    dispatch(getAuctionCategoryLIst());
+  }, []);
   useEffect(() => {
     fetchMyAuctionList();
   }, [page, perPageLimit]);
@@ -156,11 +167,28 @@ export default function MyAuctionList() {
     }
   };
 
+  const handleApply = (selectedOption, type) => {
+    if (type === "categories") {
+      setFilterState({ ...filterState, categories: selectedOption });
+    }
+  };
+console.log(filterState)
   const toggleModal = () => setIsConfirmationShow(!isConfirmationShow);
   return (
     <div>
       {isLoading && <Loader />}
       <div className="content-card">
+        <Row className="mb-3">
+          <Col md={2}>
+            <MultiSelectionFilter
+              label="Categories"
+              options={mapToSelectOptions(auctionCategoryList, "name", "id")}
+              value={filterState?.categories || []}
+              onApply={(selected) => handleApply(selected, "categories")}
+              disabled={false}
+            />
+          </Col>
+        </Row>
         {myAuctionList?.data?.length > 0 && (
           <CustomTable
             columnData={columns}
