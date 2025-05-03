@@ -6,7 +6,8 @@ export const SUCCESS_MESSAGE = {
   PASSWORD_UPDATED: "Password Updated Successfully",
   BID_PLACE: "Bid place successfully",
   CREATED_AUCTION:"Auction created successfully",
-  UPDATED_AUCTION:"Auction updated successfully"
+  UPDATED_AUCTION:"Auction updated successfully",
+  DELETED_AUCTION:"Auction deleted successfully"
 };
 
 export const CONSTANT_NAME = {

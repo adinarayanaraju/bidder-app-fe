@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PAGINATION_CONSTANT } from "../../../utils/propertyResolver";
-import { getMyAuctionList } from "../../../redux/slices/auctionSlice";
+import {
+  deleteAuction,
+  getMyAuctionList,
+} from "../../../redux/slices/auctionSlice";
 import CustomTable from "../../../sharedComponents/customTable/CustomTable";
 import {
   capitalizeFirstChar,
@@ -29,11 +32,7 @@ export default function MyAuctionList() {
   const { myAuctionList, isLoading } = useSelector((state) => state.auction);
 
   useEffect(() => {
-    const payload = {
-      page: page,
-      limit: perPageLimit,
-    };
-    dispatch(getMyAuctionList(payload));
+    fetchMyAuctionList();
   }, [page, perPageLimit]);
 
   //Column configuration
@@ -128,7 +127,34 @@ export default function MyAuctionList() {
     }
   };
 
-  const handleDelete = () => {};
+  const fetchMyAuctionList = async () => {
+    const payload = {
+      page: page,
+      limit: perPageLimit,
+    };
+    dispatch(getMyAuctionList(payload));
+  };
+
+  const handleDelete = async () => {
+    try {
+      await dispatch(deleteAuction(deleteSelectedRow?.id)).unwrap();
+
+      //Calculate the new records after delete
+      const remainingRecords = myAuctionList?.totalRecord - 1;
+
+      //Total page
+      const totalPages = Math.ceil(remainingRecords / perPageLimit);
+
+      if (page > totalPages) {
+        setPage((prev) => Math.max(prev - 1, 1));
+      } else {
+        await fetchMyAuctionList();
+      }
+      toggleModal();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const toggleModal = () => setIsConfirmationShow(!isConfirmationShow);
   return (
