@@ -30,7 +30,7 @@ export default function MyAuctionFilter({
           disabled={false}
         />
       </Col>
-      <Col xs="12" sm="6" md="4" lg="3" xl="2">
+      <Col xs="12" sm="6" md="4" lg="3">
         <CustomDatePicker
           value={filterState?.dateRange}
           onChange={(date) => {
