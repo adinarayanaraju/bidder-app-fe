@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./multiSelectionFilter.scss";
 import {
   Dropdown,
@@ -16,6 +16,8 @@ export default function MultiSelectionFilter({
   onApply,
   disabled = false,
 }) {
+  // Add due to pass unique key for select all
+  const checkboxIdRef = useRef(`selectAll-${Math.random().toString(36).substr(2, 9)}`)
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selected, setSelected] = useState(value);
 
@@ -74,12 +76,12 @@ export default function MultiSelectionFilter({
               <Input
                 type="checkbox"
                 className="form-check-input me-2"
-                id={"selectAll"}
+                id={checkboxIdRef.current}
                 disabled={disabled}
                 onChange={handleSelectAllToggle}
                 checked={isAllSelected}
               />
-              <label htmlFor={"selectAll"} className="form-check-label">{isAllSelected ? "Deselect All" : "Select All"}</label>
+              <label htmlFor={checkboxIdRef.current} className="form-check-label">{isAllSelected ? "Deselect All" : "Select All"}</label>
             </div>
             <div className="checkbox-list">
               {options?.map((option) => (

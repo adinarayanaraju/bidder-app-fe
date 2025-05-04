@@ -11,7 +11,6 @@ import {
   capitalizeFirstChar,
   formatDate,
   htmlToText,
-  mapToSelectOptions,
   truncateText,
 } from "../../../utils/commonFunction";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
@@ -20,8 +19,7 @@ import { routeConstants } from "../../../utils/routeConstant";
 import Loader from "../../../sharedComponents/loader/Loader";
 import NoRecord from "../../../sharedComponents/noRecord/NoRecord";
 import ConfirmModal from "../../../sharedComponents/confirmModal/ConfirmModal";
-import MultiSelectionFilter from "../../../sharedComponents/multiSelectionFilter/MultiSelectionFilter";
-import { Col, Row } from "reactstrap";
+import MyAuctionFilter from "./MyAuctionFilter";
 
 export default function MyAuctionList() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
@@ -32,6 +30,9 @@ export default function MyAuctionList() {
   const [deleteSelectedRow, setDeleteSelectedRow] = useState("");
   const [filterState, setFilterState] = useState({
     categories: [],
+    status: [],
+    dateRange: [],
+    sortBy: null,
   });
 
   const dispatch = useDispatch();
@@ -42,9 +43,10 @@ export default function MyAuctionList() {
   useEffect(() => {
     dispatch(getAuctionCategoryLIst());
   }, []);
+
   useEffect(() => {
     fetchMyAuctionList();
-  }, [page, perPageLimit]);
+  }, [page, perPageLimit, filterState]);
 
   //Column configuration
   const columns = [
@@ -87,6 +89,12 @@ export default function MyAuctionList() {
       formatter: (cell) => capitalizeFirstChar(cell),
     },
     {
+      text: "Created At",
+      dataField: "created_at",
+      formatter: (cell) => formatDate(cell, "DD/MM/YYYY hh:mm A"),
+      sort: true,
+    },
+    {
       text: "Action",
       dataField: "action",
       isDummyField: true,
@@ -120,6 +128,13 @@ export default function MyAuctionList() {
   ];
 
   const onTableChange = (type, { page, sizePerPage, sortField, sortOrder }) => {
+    if (type === "sort") {
+      setPage(PAGINATION_CONSTANT.PAGE_ONE);
+      if (sortField === "created_at") {
+        setFilterState({ ...filterState, sortBy: sortOrder });
+      }
+      return;
+    }
     //  If the per page limit changes, reset the page 1
     if (sizePerPage !== perPageLimit) {
       setPage(PAGINATION_CONSTANT.PAGE_ONE);
@@ -142,6 +157,11 @@ export default function MyAuctionList() {
     const payload = {
       page: page,
       limit: perPageLimit,
+      sortBy: filterState?.sortBy,
+      status: filterState?.status?.map((item) => item?.value),
+      categoryId: filterState?.categories?.map((item) => item?.value),
+      startDate: filterState?.dateRange?.[0],
+      endDate: filterState?.dateRange?.[1],
     };
     dispatch(getMyAuctionList(payload));
   };
@@ -168,27 +188,28 @@ export default function MyAuctionList() {
   };
 
   const handleApply = (selectedOption, type) => {
+    setPage(PAGINATION_CONSTANT.PAGE_ONE);
     if (type === "categories") {
       setFilterState({ ...filterState, categories: selectedOption });
     }
+    if (type === "status") {
+      setFilterState({ ...filterState, status: selectedOption });
+    }
+    if (type === "dateRange") {
+      setFilterState({ ...filterState, dateRange: selectedOption });
+    }
   };
-console.log(filterState)
+
   const toggleModal = () => setIsConfirmationShow(!isConfirmationShow);
   return (
     <div>
       {isLoading && <Loader />}
       <div className="content-card">
-        <Row className="mb-3">
-          <Col md={2}>
-            <MultiSelectionFilter
-              label="Categories"
-              options={mapToSelectOptions(auctionCategoryList, "name", "id")}
-              value={filterState?.categories || []}
-              onApply={(selected) => handleApply(selected, "categories")}
-              disabled={false}
-            />
-          </Col>
-        </Row>
+        <MyAuctionFilter
+          filterState={filterState}
+          handleApply={handleApply}
+          auctionCategoryList={auctionCategoryList}
+        />
         {myAuctionList?.data?.length > 0 && (
           <CustomTable
             columnData={columns}
