@@ -228,10 +228,8 @@ export const getMyAuctionList = createAsyncThunk(
   "auction/getMyAuctionList",
   async (payload, thunkApi) => {
     try {
-      // Build Query parameter dynamically
-      const queryParams = new URLSearchParams(payload);
-      const response = await GET(
-        `${API_END_POINT.MY_AUCTION_LIST}?${queryParams.toString()}`
+      const response = await POST(
+        `${API_END_POINT.MY_AUCTION_LIST}`, payload
       );
       if (response?.status === 200) {
         return {

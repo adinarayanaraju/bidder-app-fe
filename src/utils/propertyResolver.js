@@ -5,17 +5,35 @@ export const ERROR_MESSAGE = {
 export const SUCCESS_MESSAGE = {
   PASSWORD_UPDATED: "Password Updated Successfully",
   BID_PLACE: "Bid place successfully",
-  CREATED_AUCTION:"Auction created successfully",
-  UPDATED_AUCTION:"Auction updated successfully",
-  DELETED_AUCTION:"Auction deleted successfully"
+  CREATED_AUCTION: "Auction created successfully",
+  UPDATED_AUCTION: "Auction updated successfully",
+  DELETED_AUCTION: "Auction deleted successfully",
 };
 
 export const CONSTANT_NAME = {
   PLACE_YOUR_BID: "Place your bid",
-  AUCTION_PHOTO_MAX_SIZE : 25 * 1024 * 1024, //25MB,
+  AUCTION_PHOTO_MAX_SIZE: 25 * 1024 * 1024, //25MB,
   AUCTION_PHOTO_VALIDATION: ["image/jpeg", "image/jpg", "image/png"],
-  PROFILE_PHOTO_MAX_SIZE : 25 * 1024 * 1024, //25MB,
-  PROFILE_PHOTO_VALIDATION: ["image/jpeg", "image/jpg", "image/png"]
+  PROFILE_PHOTO_MAX_SIZE: 25 * 1024 * 1024, //25MB,
+  PROFILE_PHOTO_VALIDATION: ["image/jpeg", "image/jpg", "image/png"],
+  AUCTION_STATUS_LIST: [
+    {
+      value: "pending",
+      label: "Pending",
+    },
+    {
+      value: "active",
+      label: "Active",
+    },
+    {
+      value: "completed",
+      label: "Completed",
+    },
+    {
+      value: "rejected",
+      label: "Rejected",
+    },
+  ],
 };
 
 export const USER_ROLE = {
@@ -24,5 +42,5 @@ export const USER_ROLE = {
 
 export const PAGINATION_CONSTANT = {
   PAGE_ONE: 1,
-  PER_PAGE_LIMIT: 10
-}
+  PER_PAGE_LIMIT: 10,
+};
