@@ -28,6 +28,7 @@ export default function MyAuctionFilter({
           value={filterState?.status || []}
           onApply={(selected) => handleApply(selected, "status")}
           disabled={false}
+          isSearchable={false}
         />
       </Col>
       <Col xs="12" sm="6" md="4" lg="3">
