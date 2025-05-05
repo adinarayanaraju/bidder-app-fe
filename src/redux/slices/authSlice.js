@@ -3,6 +3,7 @@ import { GET, POST } from "../../services/axiosRequestHandler";
 import { API_END_POINT } from "../../utils/apiEndPoints";
 import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../utils/propertyResolver";
 import { showToast } from "../../sharedComponents/toast/showTaost";
+import { getLoginUserDetail } from "./userSlice";
 
 const authInitialState = {
   isUserLogin: false,
@@ -45,6 +46,7 @@ export const signinUser = createAsyncThunk(
       const response = await POST(API_END_POINT.LOGIN_USER, userData);
       if (response?.status === 200) {
         // showToast(response?.response?.data?.message , "success")
+        thunkApi.dispatch(getLoginUserDetail());
         localStorage.setItem("token", response?.response?.data?.data);
         return response?.response?.data?.data;
       } else {

@@ -7,9 +7,11 @@ import { routeConstants } from "../../../utils/routeConstant";
 import { CONSTANT_NAME, ERROR_MESSAGE } from "../../../utils/propertyResolver";
 import { showToast } from "../../../sharedComponents/toast/showTaost";
 import CustomAvatar from "../../../sharedComponents/customAvatar/CustomAvatar";
+import { useSelector } from "react-redux";
 export default function UserHeader() {
   const navigate = useNavigate();
   const inputRef = useRef(null);
+  const { loginUserDetails } = useSelector((state) => state.user);
 
   const handleCreateAuction = () => {
     navigate(routeConstants.AUCTION_CREATE);
@@ -48,7 +50,7 @@ export default function UserHeader() {
       <div className="d-flex justify-content-between align-items-center header-bg p-4">
         <div className="profile-pic-wrapper" onClick={handleFileClick}>
           {/* <img src={userProfile} alt="User Profile" className="profile-pic" /> */}
-          <CustomAvatar firstName={"Vivek"} lastName={"Kumar"} />
+          <CustomAvatar firstName={loginUserDetails?.first_name} lastName={loginUserDetails?.last_name} />
           <div className="overlay">
             <FaCamera className="camera-icon" />
           </div>
