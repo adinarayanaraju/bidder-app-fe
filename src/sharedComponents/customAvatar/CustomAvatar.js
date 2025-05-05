@@ -13,7 +13,7 @@ export default function CustomAvatar({
   if (firstName && lastName) {
     initials = `${firstName[0].toUpperCase()} ${lastName[0].toUpperCase()}`;
   } else {
-    initials = firstName.slice(0, 2).toUpperCase();
+    initials = firstName?.slice(0, 2).toUpperCase();
   }
 
   const style = {
