@@ -24,12 +24,23 @@ export default function AuctionDetails() {
   const dispatch = useDispatch();
   const { auction_id } = useParams();
   const { auctionDetail, isLoading } = useSelector((state) => state.auction);
+  const { loginUserDetails } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getAuctionDetailById(auction_id));
   }, [auction_id]);
 
   const toggleModal = () => setIsPlaceModalShow(!isPlaceModalShow);
+
+  const shouldBidNowCTAVisible = () => {
+    if (
+      auctionDetail?.status !== "active" ||
+      auctionDetail?.creator?.id === loginUserDetails?.id
+    ) {
+      return false;
+    }
+    return true;
+  };
 
   return (
     <>
@@ -51,22 +62,7 @@ export default function AuctionDetails() {
           <Row>
             <Col md={6}>
               <CustomSlider
-                dataList={[
-                  "https://picsum.photos/id/1015/600/400",
-                  "https://picsum.photos/id/1016/600/400",
-                  "https://picsum.photos/id/1018/600/400",
-                  "https://picsum.photos/id/1020/600/400",
-                  "https://picsum.photos/id/1024/600/400",
-                  "https://picsum.photos/id/1025/600/400",
-                  "https://picsum.photos/id/1033/600/400",
-                  "https://picsum.photos/id/1035/600/400",
-                  "https://picsum.photos/id/1039/600/400",
-                  "https://picsum.photos/id/1043/600/400",
-                  "https://picsum.photos/id/1033/600/400",
-                  "https://picsum.photos/id/1035/600/400",
-                  "https://picsum.photos/id/1039/600/400",
-                  "https://picsum.photos/id/1043/600/400",
-                ]}
+                dataList={auctionDetail?.images?.map((item) => item?.url)}
               />
             </Col>
             {/* Details take 50% width */}
@@ -79,7 +75,13 @@ export default function AuctionDetails() {
                   {formatDate(auctionDetail?.end_date, "h:mm A")})
                 </p>
                 <p className="price">RS. {auctionDetail?.base_price}</p>
-                <p className="auction-info">{auctionDetail?.description}</p>
+                <p className="auction-info">
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: auctionDetail?.description,
+                    }}
+                  />
+                </p>
                 {/* Seller Information Section */}
                 <div className="seller-info">
                   <h1>Seller Information</h1>
@@ -95,12 +97,14 @@ export default function AuctionDetails() {
                     <strong>Email:</strong> {auctionDetail?.creator?.email}
                   </p>
                 </div>
-                <div className="bid-now-btn">
-                  <Button onClick={toggleModal}>Bid Now</Button>
-                  <div className="save-draft">
-                    <img src={heartIcon} alt="save" />
+                {shouldBidNowCTAVisible() && (
+                  <div className="bid-now-btn">
+                    <Button onClick={toggleModal}>Bid Now</Button>
+                    <div className="save-draft">
+                      <img src={heartIcon} alt="save" />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </Col>
           </Row>
