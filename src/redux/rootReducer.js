@@ -3,12 +3,14 @@ import testSlice from "./slices/testSlice";
 import auctionSlice  from "./slices/auctionSlice";
 import authSlice, { logout } from "./slices/authSlice";
 import userSlice  from "./slices/userSlice";
+import bidSlice  from "./slices/bidSlice";
 
 const appReducer = combineReducers({
   test: testSlice,
   auth: authSlice,
   auction: auctionSlice,
-  user: userSlice
+  user: userSlice,
+  bid: bidSlice
 });
 
 const rootReducer = (state, action) => {
