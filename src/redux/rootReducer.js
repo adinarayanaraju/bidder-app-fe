@@ -10,7 +10,7 @@ const appReducer = combineReducers({
   auth: authSlice,
   auction: auctionSlice,
   user: userSlice,
-  bid: bidSlice
+  bid: bidSlice,
 });
 
 const rootReducer = (state, action) => {
