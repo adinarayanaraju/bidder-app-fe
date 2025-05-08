@@ -15,11 +15,15 @@ export default function MultiSelectionFilter({
   value = [],
   onApply,
   disabled = false,
+  isSearchable = true,
 }) {
   // Add due to pass unique key for select all
-  const checkboxIdRef = useRef(`selectAll-${Math.random().toString(36).substr(2, 9)}`)
+  const checkboxIdRef = useRef(
+    `selectAll-${Math.random().toString(36).substr(2, 9)}`
+  );
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selected, setSelected] = useState(value);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setSelected(value);
@@ -46,6 +50,7 @@ export default function MultiSelectionFilter({
 
   const handleApply = () => {
     onApply?.(selected);
+    setSearchTerm("");
     setDropdownOpen(false);
   };
 
@@ -53,10 +58,15 @@ export default function MultiSelectionFilter({
     setSelected([]);
   };
 
-  const isSelected = (option) => selected?.some((item)=> item?.value === option?.value);
+  const isSelected = (option) =>
+    selected?.some((item) => item?.value === option?.value);
 
   const isAllSelected = selected?.length === options?.length;
-  
+
+  const filteredOption = options?.filter((opt) =>
+    opt?.label?.toLowerCase().includes(searchTerm?.toLowerCase())
+  );
+
   return (
     <>
       <Dropdown
@@ -72,6 +82,17 @@ export default function MultiSelectionFilter({
         </DropdownToggle>
         <DropdownMenu className="filter-dropdown-menu">
           <div className="filter-list-wrapper">
+            {isSearchable && (
+              <div className="mb-2 px-2">
+                <Input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  disabled={disabled}
+                />
+              </div>
+            )}
             <div className="form-check d-flex align-items-center cursor-pointer">
               <Input
                 type="checkbox"
@@ -81,10 +102,15 @@ export default function MultiSelectionFilter({
                 onChange={handleSelectAllToggle}
                 checked={isAllSelected}
               />
-              <label htmlFor={checkboxIdRef.current} className="form-check-label">{isAllSelected ? "Deselect All" : "Select All"}</label>
+              <label
+                htmlFor={checkboxIdRef.current}
+                className="form-check-label"
+              >
+                {isAllSelected ? "Deselect All" : "Select All"}
+              </label>
             </div>
             <div className="checkbox-list">
-              {options?.map((option) => (
+              {filteredOption?.map((option) => (
                 <DropdownItem
                   className="px-0 drop-down-item"
                   key={option?.value}
@@ -99,10 +125,17 @@ export default function MultiSelectionFilter({
                       onChange={() => handleChange(option)}
                       checked={isSelected(option)}
                     />
-                    <label htmlFor={option?.value} className="form-check-label">{option?.label}</label>
+                    <label htmlFor={option?.value} className="form-check-label">
+                      {option?.label}
+                    </label>
                   </div>
                 </DropdownItem>
               ))}
+              {
+                filteredOption?.length === 0 && (
+                  <div className="px-3 py-2 text-muted">No options found</div>
+                )
+              }
             </div>
           </div>
 
