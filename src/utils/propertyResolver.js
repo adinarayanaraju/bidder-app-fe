@@ -34,6 +34,20 @@ export const CONSTANT_NAME = {
       label: "Rejected",
     },
   ],
+  BID_STATUS_LIST:[
+    {
+      value: "pending",
+      label: "Pending",
+    },
+    {
+      value: "accepted",
+      label: "Accepted",
+    },
+    {
+      value: "rejected",
+      label: "Rejected",
+    }
+  ]
 };
 
 export const USER_ROLE = {
