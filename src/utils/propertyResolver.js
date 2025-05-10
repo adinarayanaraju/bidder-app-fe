@@ -34,7 +34,7 @@ export const CONSTANT_NAME = {
       label: "Rejected",
     },
   ],
-  BID_STATUS_LIST:[
+  BID_STATUS_LIST: [
     {
       value: "pending",
       label: "Pending",
@@ -46,12 +46,14 @@ export const CONSTANT_NAME = {
     {
       value: "rejected",
       label: "Rejected",
-    }
-  ]
+    },
+  ],
 };
 
 export const USER_ROLE = {
-  USER: 1,
+  SUPER_ADMIN: 1,
+  ADMIN: 2,
+  USER: 3,
 };
 
 export const PAGINATION_CONSTANT = {
