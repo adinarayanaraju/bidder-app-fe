@@ -33,6 +33,7 @@ export default function MyAuctionList() {
     status: [],
     dateRange: [],
     sortBy: null,
+    search:""
   });
 
   const dispatch = useDispatch();
@@ -162,6 +163,7 @@ export default function MyAuctionList() {
       categoryId: filterState?.categories?.map((item) => item?.value),
       startDate: filterState?.dateRange?.[0],
       endDate: filterState?.dateRange?.[1],
+      search: filterState?.search
     };
     dispatch(getMyAuctionList(payload));
   };
@@ -197,6 +199,9 @@ export default function MyAuctionList() {
     }
     if (type === "dateRange") {
       setFilterState({ ...filterState, dateRange: selectedOption });
+    }
+    if (type === "search") {
+      setFilterState({ ...filterState, search: selectedOption });
     }
   };
 
