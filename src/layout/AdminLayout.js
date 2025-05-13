@@ -1,13 +1,16 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-
+import AdminSidebar from '../adminSidebar/AdminSidebar'
+import './layout.scss'
 export default function AdminLayout() {
   return (
     <>
-      <main>
-        <h1>Sidebar</h1>
+     <div className="admin-layout">
+      <AdminSidebar />
+      <div className="admin-content">
         <Outlet />
-      </main>
+      </div>
+     </div>
     </>
   )
 }
