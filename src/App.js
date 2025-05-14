@@ -20,6 +20,7 @@ import UpdateAuction from "./views/createAuction/UpdateAuction";
 import { USER_ROLE } from "./utils/propertyResolver";
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
+import AuctionManagement from "./admin/auctionManagement/AuctionManagement";
 function App() {
   const userRole = useSelector((state)=>state.user?.loginUserDetails?.role_id);
   return (
@@ -30,6 +31,7 @@ function App() {
           {[USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN].includes(userRole) && (
             <Route element={<AdminLayout />}>
               <Route path={routeConstants.SIGN_UP} element={<Signup />} />
+              <Route path={routeConstants.ADMIN_AUCTION_LIST} element={<AuctionManagement />} />
             </Route>
           )}
 

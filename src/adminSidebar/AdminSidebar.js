@@ -15,20 +15,16 @@ export default function AdminSidebar() {
       path: routeConstants.HOME_PAGE,
     },
     {
-      id: "userManagement",
-      label: "User Management",
+      id: "auctionManagement",
+      label: "Auction Management",
       icon: <FaUsers />,
       children: [
         {
-          id: "appUser",
-          label: "App User",
-          path: "/admin/user/app",
+          id: "auctionList",
+          label: "Auction List",
+          path: routeConstants.ADMIN_AUCTION_LIST,
         },
-        {
-          id: "webUser",
-          label: "Web User",
-          path: "/admin/user/web",
-        },
+       
       ],
     },
   ];
@@ -73,9 +69,9 @@ export default function AdminSidebar() {
                 {item?.children?.map((subItem) => (
                   <li
                     className={`submenu-item ${
-                      item?.path === location?.pathname ? "active" : ""
+                      subItem?.path === location?.pathname ? "active" : ""
                     }`}
-                    key={item?.id}
+                    key={subItem?.id}
                     onClick={() => handleNavigation(subItem?.path)}
                   >
                     {subItem?.label}

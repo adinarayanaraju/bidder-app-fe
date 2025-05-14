@@ -3,4 +3,5 @@ export const modulePath = {
   AUCTION: "/auction",
   PERMISSION: "/permission-denied",
   USER: "/user",
+  ADMIN: "/admin"
 };
