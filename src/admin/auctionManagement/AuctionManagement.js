@@ -9,18 +9,32 @@ import CustomTable from "../../sharedComponents/customTable/CustomTable";
 import { useDispatch, useSelector } from "react-redux";
 import { getAdminAuctionList } from "../../redux/slices/admin/adminAuctionSlice";
 import Loader from "../../sharedComponents/loader/Loader";
+import { getAuctionCategoryLIst } from "../../redux/slices/auctionSlice";
+import MyAuctionFilter from "../../views/userProfile/components/MyAuctionFilter";
 
 export default function AuctionManagement() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
   const [perPageLimit, setPerPageLimit] = useState(
     PAGINATION_CONSTANT.PER_PAGE_LIMIT
   );
+  const [filterState, setFilterState] = useState({
+    categories: [],
+    status: [],
+    dateRange: [],
+    sortBy: null,
+    search: "",
+  });
   const dispatch = useDispatch();
   const { auctionList, isLoading } = useSelector((state) => state.adminAuction);
+  const { auctionCategoryList } = useSelector((state) => state.auction);
+
+  useEffect(() => {
+    dispatch(getAuctionCategoryLIst());
+  }, []);
 
   useEffect(() => {
     fetchAdminAuction();
-  }, [page, perPageLimit]);
+  }, [page, perPageLimit, filterState]);
 
   const columns = [
     {
@@ -111,11 +125,24 @@ export default function AuctionManagement() {
     const payload = {
       page: page,
       limit: perPageLimit,
+      sortBy: filterState?.sortBy,
+      status: filterState?.status?.map((item) => item?.value),
+      categoryId: filterState?.categories?.map((item) => item?.value),
+      startDate: filterState?.dateRange?.[0],
+      endDate: filterState?.dateRange?.[1],
+      search: filterState?.search,
     };
     dispatch(getAdminAuctionList(payload));
   };
 
   const onTableChange = (type, { page, sizePerPage, sortField, sortOrder }) => {
+    if (type === "sort") {
+      setPage(PAGINATION_CONSTANT.PAGE_ONE);
+      if (sortField === "created_at") {
+        setFilterState({ ...filterState, sortBy: sortOrder });
+      }
+      return;
+    }
     //  If the per page limit changes, reset the page 1
     if (sizePerPage !== perPageLimit) {
       setPage(PAGINATION_CONSTANT.PAGE_ONE);
@@ -125,12 +152,20 @@ export default function AuctionManagement() {
 
     setPerPageLimit(sizePerPage);
   };
+
+  const handleApply = (selectedOption, type) => {
+    setPage(PAGINATION_CONSTANT.PAGE_ONE);
+    setFilterState({ ...filterState, [type]: selectedOption });
+  };
   return (
     <div className="auction-management-wrapper light-grey-bg h-100 p-3">
-      {
-        isLoading && <Loader />
-      }
+      {isLoading && <Loader />}
       <div className="table-card-wrapper">
+        <MyAuctionFilter
+          filterState={filterState}
+          handleApply={handleApply}
+          auctionCategoryList={auctionCategoryList}
+        />
         <CustomTable
           columnData={columns}
           dataTable={auctionList?.data || []}
