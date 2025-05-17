@@ -11,6 +11,8 @@ import { getAdminAuctionList } from "../../redux/slices/admin/adminAuctionSlice"
 import Loader from "../../sharedComponents/loader/Loader";
 import { getAuctionCategoryLIst } from "../../redux/slices/auctionSlice";
 import MyAuctionFilter from "../../views/userProfile/components/MyAuctionFilter";
+import { routeConstants } from "../../utils/routeConstant";
+import ConfirmModal from "../../sharedComponents/confirmModal/ConfirmModal";
 
 export default function AuctionManagement() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
@@ -24,6 +26,8 @@ export default function AuctionManagement() {
     sortBy: null,
     search: "",
   });
+  const [isConfirmationShow, setIsConfirmationShow] = useState(false);
+  const [selectedAuction, setSelectedAuction] = useState("");
   const dispatch = useDispatch();
   const { auctionList, isLoading } = useSelector((state) => state.adminAuction);
   const { auctionCategoryList } = useSelector((state) => state.auction);
@@ -88,37 +92,37 @@ export default function AuctionManagement() {
       formatter: (cell) => formatDate(cell, "DD/MM/YYYY hh:mm A"),
       sort: true,
     },
-    // {
-    //   text: "Action",
-    //   dataField: "action",
-    //   isDummyField: true,
-    //   align: "center",
-    //   headerAlign: "center",
-    //   formatter: (_, row) => {
-    //     return (
-    //       <div className="d-flex justify-content-between gap-2">
-    //         <FaEye
-    //           className="icon-hover view"
-    //           title="View"
-    //           onClick={() => handleRedirection(row?.id, "view")}
-    //         />
-    //         <FaEdit
-    //           className="icon-hover edit"
-    //           title="Edit"
-    //           onClick={() => handleRedirection(row?.id, "edit")}
-    //         />
-    //         <FaTrash
-    //           className="icon-hover delete"
-    //           title="Delete"
-    //           onClick={() => {
-    //             setIsConfirmationShow(true);
-    //             setDeleteSelectedRow(row);
-    //           }}
-    //         />
-    //       </div>
-    //     );
-    //   },
-    // },
+    {
+      text: "Action",
+      dataField: "action",
+      isDummyField: true,
+      align: "center",
+      headerAlign: "center",
+      formatter: (_, row) => {
+        return (
+          <div className="d-flex justify-content-between gap-2">
+            <p
+              className="action-link"
+              onClick={() => {
+                window.open(`${routeConstants.AUCTION_DETAIL}/${row?.id}`);
+              }}
+            >
+              View
+            </p>
+            <p className="action-link">Change Status</p>
+            <p
+              className="action-link"
+              onClick={() => {
+                setIsConfirmationShow(true);
+                setSelectedAuction(row);
+              }}
+            >
+              Delete
+            </p>
+          </div>
+        );
+      },
+    },
   ];
 
   const fetchAdminAuction = async () => {
@@ -157,6 +161,8 @@ export default function AuctionManagement() {
     setPage(PAGINATION_CONSTANT.PAGE_ONE);
     setFilterState({ ...filterState, [type]: selectedOption });
   };
+
+  const handleDelete = () => {};
   return (
     <div className="auction-management-wrapper light-grey-bg h-100 p-3">
       {isLoading && <Loader />}
@@ -179,6 +185,20 @@ export default function AuctionManagement() {
           sort={true}
         />
       </div>
+      {isConfirmationShow && (
+        <ConfirmModal
+          isOpen={isConfirmationShow}
+          toggle={() => {
+            setIsConfirmationShow(!isConfirmationShow);
+          }}
+          title="Confirm Action"
+          message={`Are you sure you want to delete "${selectedAuction?.item_name}" record?`}
+          isWarningIconShow={true}
+          confirmText="Yes, Confirm"
+          cancelText="Cancel"
+          onConfirm={handleDelete}
+        />
+      )}
     </div>
   );
 }
