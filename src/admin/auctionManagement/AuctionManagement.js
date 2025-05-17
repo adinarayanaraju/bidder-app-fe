@@ -13,6 +13,7 @@ import { getAuctionCategoryLIst } from "../../redux/slices/auctionSlice";
 import MyAuctionFilter from "../../views/userProfile/components/MyAuctionFilter";
 import { routeConstants } from "../../utils/routeConstant";
 import ConfirmModal from "../../sharedComponents/confirmModal/ConfirmModal";
+import UpdateStatus from "./components/UpdateStatus";
 
 export default function AuctionManagement() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
@@ -28,6 +29,7 @@ export default function AuctionManagement() {
   });
   const [isConfirmationShow, setIsConfirmationShow] = useState(false);
   const [selectedAuction, setSelectedAuction] = useState("");
+  const [isStatusShow, setIsStatusShow] = useState(false);
   const dispatch = useDispatch();
   const { auctionList, isLoading } = useSelector((state) => state.adminAuction);
   const { auctionCategoryList } = useSelector((state) => state.auction);
@@ -109,7 +111,15 @@ export default function AuctionManagement() {
             >
               View
             </p>
-            <p className="action-link">Change Status</p>
+            <p
+              className="action-link"
+              onClick={() => {
+                setIsStatusShow(true);
+                setSelectedAuction(row);
+              }}
+            >
+              Change Status
+            </p>
             <p
               className="action-link"
               onClick={() => {
@@ -163,6 +173,8 @@ export default function AuctionManagement() {
   };
 
   const handleDelete = () => {};
+
+  const handleUpdateStatus = (payload) => {};
   return (
     <div className="auction-management-wrapper light-grey-bg h-100 p-3">
       {isLoading && <Loader />}
@@ -197,6 +209,14 @@ export default function AuctionManagement() {
           confirmText="Yes, Confirm"
           cancelText="Cancel"
           onConfirm={handleDelete}
+        />
+      )}
+      {isStatusShow && (
+        <UpdateStatus
+          isOpen={isStatusShow}
+          toggle={() => setIsStatusShow(!isStatusShow)}
+          handleUpdate={handleUpdateStatus}
+          auctionDetail={selectedAuction}
         />
       )}
     </div>
