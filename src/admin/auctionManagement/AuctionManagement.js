@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PAGINATION_CONSTANT } from "../../utils/propertyResolver";
 import {
   capitalizeFirstChar,
@@ -6,143 +6,22 @@ import {
   truncateText,
 } from "../../utils/commonFunction";
 import CustomTable from "../../sharedComponents/customTable/CustomTable";
+import { useDispatch, useSelector } from "react-redux";
+import { getAdminAuctionList } from "../../redux/slices/admin/adminAuctionSlice";
+import Loader from "../../sharedComponents/loader/Loader";
 
 export default function AuctionManagement() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
   const [perPageLimit, setPerPageLimit] = useState(
     PAGINATION_CONSTANT.PER_PAGE_LIMIT
   );
-  const dummyRecord = [
-    {
-      id: 27,
-      item_name: "abc",
-      base_price: 22,
-      description: "<p>aabbb</p>",
-      start_date: "2025-05-15T17:32:13.000Z",
-      end_date: "2025-05-28T17:32:19.000Z",
-      status: "pending",
-      images: [
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746120751536-m97mecndtv.jpg",
-          size: 85074,
-          fileName: "DL-Convert-PVC-Card.jpg",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746120789094-xpbc3x9ic1.jpeg",
-          size: 11371,
-          fileName: "images.jpeg",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746120792850-xmybmbvti3f.png",
-          size: 82580,
-          fileName: "How-to-Apply-for-a-Personal-Loan-on-Aadhaar-Card_.png",
-        },
-      ],
-      updated_at: null,
-      created_at: "2025-05-01T17:33:21.000Z",
-      totalBids: 0,
-      category: {
-        id: 2,
-        name: "test name2",
-        description: "category description",
-        icon: "category icon",
-      },
-      creator: {
-        id: 8,
-        first_name: "vivek",
-        last_name: "verma",
-        email: "apnicoding72@gmail.com",
-        dob: null,
-      },
-    },
-    {
-      id: 26,
-      item_name: "aaa",
-      base_price: 22,
-      description: "<p>abc</p>",
-      start_date: "2025-05-16T06:19:41.000Z",
-      end_date: "2025-05-16T06:19:45.000Z",
-      status: "pending",
-      images: [
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080398652-hxccrun52o.jpg",
-          size: 85074,
-          fileName: "DL-Convert-PVC-Card.jpg",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080419567-m08q6e0avzg.png",
-          size: 82580,
-          fileName: "How-to-Apply-for-a-Personal-Loan-on-Aadhaar-Card_.png",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080429189-w5yv2mgf2gj.jpg",
-          size: 19850,
-          fileName: "best-thumbnail-background-for-youtube.jpg",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080435174-3ya0un67zes.jpg",
-          size: 85074,
-          fileName: "DL-Convert-PVC-Card.jpg",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080435695-ezz50g6woc.jpeg",
-          size: 11371,
-          fileName: "images.jpeg",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080436046-kr51p0symfm.png",
-          size: 82580,
-          fileName: "How-to-Apply-for-a-Personal-Loan-on-Aadhaar-Card_.png",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080440139-w233zcf2pu.jpg",
-          size: 85074,
-          fileName: "DL-Convert-PVC-Card.jpg",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080440468-dwvjk5314b6.jpeg",
-          size: 11371,
-          fileName: "images.jpeg",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080440728-9tm08jrmjgq.png",
-          size: 82580,
-          fileName: "How-to-Apply-for-a-Personal-Loan-on-Aadhaar-Card_.png",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080449381-t6ai39zgwde.jpg",
-          size: 85074,
-          fileName: "DL-Convert-PVC-Card.jpg",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080450103-u3lz3x9sf.jpeg",
-          size: 11371,
-          fileName: "images.jpeg",
-        },
-        {
-          url: "https://dm8w611fhi3t8.cloudfront.net/upload/1746080450434-j9k23t965o.png",
-          size: 82580,
-          fileName: "How-to-Apply-for-a-Personal-Loan-on-Aadhaar-Card_.png",
-        },
-      ],
-      updated_at: null,
-      created_at: "2025-05-01T06:21:08.000Z",
-      totalBids: 0,
-      category: {
-        id: 3,
-        name: "test name3",
-        description: "category description",
-        icon: "category icon",
-      },
-      creator: {
-        id: 8,
-        first_name: "vivek",
-        last_name: "verma",
-        email: "apnicoding72@gmail.com",
-        dob: null,
-      },
-    },
-  ];
+  const dispatch = useDispatch();
+  const { auctionList, isLoading } = useSelector((state) => state.adminAuction);
+
+  useEffect(() => {
+    fetchAdminAuction();
+  }, [page, perPageLimit]);
+
   const columns = [
     {
       text: "Item Name",
@@ -228,19 +107,36 @@ export default function AuctionManagement() {
     // },
   ];
 
-  const onTableChange = (
-    type,
-    { page, sizePerPage, sortField, sortOrder }
-  ) => {};
+  const fetchAdminAuction = async () => {
+    const payload = {
+      page: page,
+      limit: perPageLimit,
+    };
+    dispatch(getAdminAuctionList(payload));
+  };
+
+  const onTableChange = (type, { page, sizePerPage, sortField, sortOrder }) => {
+    //  If the per page limit changes, reset the page 1
+    if (sizePerPage !== perPageLimit) {
+      setPage(PAGINATION_CONSTANT.PAGE_ONE);
+    } else {
+      setPage(page);
+    }
+
+    setPerPageLimit(sizePerPage);
+  };
   return (
     <div className="auction-management-wrapper light-grey-bg h-100 p-3">
+      {
+        isLoading && <Loader />
+      }
       <div className="table-card-wrapper">
         <CustomTable
           columnData={columns}
-          dataTable={dummyRecord || []}
+          dataTable={auctionList?.data || []}
           page={page}
           size={perPageLimit}
-          totalRecords={dummyRecord?.length || 0}
+          totalRecords={auctionList?.totalRecord || 0}
           showPagination={true}
           sizePerPageDropdown={true}
           cellEdit={false}
