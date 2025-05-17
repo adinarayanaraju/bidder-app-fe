@@ -14,5 +14,6 @@ export const API_END_POINT = {
   UPDATE_AUCTION:"/auction/update",
   DELETE_AUCTION:"/auction/delete",
   USER_DETAIL:"/user/detail",
-  GET_MY_BID_LIST:"/bid/my-bid"
+  GET_MY_BID_LIST:"/bid/my-bid",
+  ADMIN_AUCTION_LIST:"/admin/auctions"
 };
