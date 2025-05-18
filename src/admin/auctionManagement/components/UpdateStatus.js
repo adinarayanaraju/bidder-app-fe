@@ -15,7 +15,7 @@ export default function UpdateStatus({
     value: auctionDetail?.status,
     label: capitalizeFirstChar(auctionDetail?.status),
   });
-  const [reason, setReason] = useState("");
+  const [reason, setReason] = useState(auctionDetail?.rejected_reason || "");
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
   useEffect(() => {
@@ -23,6 +23,7 @@ export default function UpdateStatus({
       value: auctionDetail?.status,
       label: capitalizeFirstChar(auctionDetail?.status),
     });
+    setReason(auctionDetail?.rejected_reason);
   }, [auctionDetail]);
 
   useEffect(() => {
@@ -42,8 +43,6 @@ export default function UpdateStatus({
       rejectReason: reason,
     };
     handleUpdate(payload);
-    setStatus("");
-    setReason("");
   };
 
   return (

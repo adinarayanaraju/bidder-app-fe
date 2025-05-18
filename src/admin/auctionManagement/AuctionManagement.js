@@ -7,13 +7,17 @@ import {
 } from "../../utils/commonFunction";
 import CustomTable from "../../sharedComponents/customTable/CustomTable";
 import { useDispatch, useSelector } from "react-redux";
-import { getAdminAuctionList } from "../../redux/slices/admin/adminAuctionSlice";
+import {
+  getAdminAuctionList,
+  updateAuctionStatus,
+} from "../../redux/slices/admin/adminAuctionSlice";
 import Loader from "../../sharedComponents/loader/Loader";
 import { getAuctionCategoryLIst } from "../../redux/slices/auctionSlice";
 import MyAuctionFilter from "../../views/userProfile/components/MyAuctionFilter";
 import { routeConstants } from "../../utils/routeConstant";
 import ConfirmModal from "../../sharedComponents/confirmModal/ConfirmModal";
 import UpdateStatus from "./components/UpdateStatus";
+import moment from "moment";
 
 export default function AuctionManagement() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
@@ -101,6 +105,7 @@ export default function AuctionManagement() {
       align: "center",
       headerAlign: "center",
       formatter: (_, row) => {
+        const isExpired = moment(row?.end_date).isBefore(moment());
         return (
           <div className="d-flex justify-content-between gap-2">
             <p
@@ -112,10 +117,12 @@ export default function AuctionManagement() {
               View
             </p>
             <p
-              className="action-link"
+              className={`action-link ${isExpired ? "disable" : ""}`}
               onClick={() => {
-                setIsStatusShow(true);
-                setSelectedAuction(row);
+                if (!isExpired) {
+                  setIsStatusShow(true);
+                  setSelectedAuction(row);
+                }
               }}
             >
               Change Status
@@ -174,7 +181,15 @@ export default function AuctionManagement() {
 
   const handleDelete = () => {};
 
-  const handleUpdateStatus = (payload) => {};
+  const handleUpdateStatus = async (payload) => {
+    try {
+      await dispatch(updateAuctionStatus(payload)).unwrap();
+      fetchAdminAuction();
+      setIsStatusShow(false);
+    } catch (error) {
+      console.log("Error while update auction status", error);
+    }
+  };
   return (
     <div className="auction-management-wrapper light-grey-bg h-100 p-3">
       {isLoading && <Loader />}
