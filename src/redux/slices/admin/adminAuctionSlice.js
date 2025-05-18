@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { GET, POST } from "../../../services/axiosRequestHandler";
-import { ERROR_MESSAGE } from "../../../utils/propertyResolver";
+import { POST } from "../../../services/axiosRequestHandler";
+import {
+  ERROR_MESSAGE,
+  SUCCESS_MESSAGE,
+} from "../../../utils/propertyResolver";
 import { showToast } from "../../../sharedComponents/toast/showTaost";
 import { API_END_POINT } from "../../../utils/apiEndPoints";
 
@@ -42,6 +45,32 @@ export const getAdminAuctionList = createAsyncThunk(
   }
 );
 
+export const updateAuctionStatus = createAsyncThunk(
+  "auction/updateAuctionStatus",
+  async (payload, thunkApi) => {
+    try {
+      const response = await POST(API_END_POINT.UPDATE_AUCTION_STATUS, payload);
+      if (response?.status === 200) {
+        showToast(SUCCESS_MESSAGE.UPDATED_AUCTION, "success");
+        return response?.response?.data?.data;
+      } else {
+        showToast(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+          "error"
+        );
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const adminAuctionSlice = createSlice({
   name: "adminAuction",
   initialState: adminAuctionInitialState,
@@ -62,6 +91,16 @@ export const adminAuctionSlice = createSlice({
           data: [],
           totalRecord: 0,
         };
+      })
+      .addCase(updateAuctionStatus.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateAuctionStatus.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(updateAuctionStatus.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
