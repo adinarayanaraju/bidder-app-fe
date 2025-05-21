@@ -21,6 +21,7 @@ import { USER_ROLE } from "./utils/propertyResolver";
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
 import AuctionManagement from "./admin/auctionManagement/AuctionManagement";
+import UserCreate from "./admin/userManagement/UserCreate";
 function App() {
   const userRole = useSelector((state)=>state.user?.loginUserDetails?.role_id);
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route element={<AdminLayout />}>
               <Route path={routeConstants.SIGN_UP} element={<Signup />} />
               <Route path={routeConstants.ADMIN_AUCTION_LIST} element={<AuctionManagement />} />
+              <Route path={routeConstants.ADMIN_USER_CREATE} element={<UserCreate />} />
             </Route>
           )}
 
