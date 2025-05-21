@@ -27,6 +27,19 @@ export default function AdminSidebar() {
        
       ],
     },
+     {
+      id: "userManagement",
+      label: "User Management",
+      icon: <FaUsers />,
+      children: [
+        {
+          id: "createUser",
+          label: "Create User",
+          path: routeConstants.ADMIN_USER_CREATE,
+        },
+       
+      ],
+    },
   ];
   const handleNavigation = (path) => {
     if (path) {

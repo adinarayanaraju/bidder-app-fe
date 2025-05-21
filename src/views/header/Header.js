@@ -9,7 +9,8 @@ import { routeConstants } from "../../utils/routeConstant";
 import { useDispatch, useSelector } from "react-redux";
 import ConfirmModal from "../../sharedComponents/confirmModal/ConfirmModal";
 import { logout } from "../../redux/slices/authSlice";
-
+import { USER_ROLE } from "../../utils/propertyResolver";
+import { MdArrowOutward } from "react-icons/md";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -18,6 +19,7 @@ export default function Header() {
   const dispatch = useDispatch();
 
   const { isUserLogin } = useSelector((state) => state.auth);
+  const { loginUserDetails } = useSelector((state) => state.user);
   const navLinks = [
     {
       id: 1,
@@ -98,16 +100,24 @@ export default function Header() {
                 />
               </>
             )}
-            {isUserLogin ? (
-              <button className="btn-primary" onClick={toggleModal}>
-                Logout
-              </button>
-            ) : (
+            {!isUserLogin && (
               <button
                 className="btn-primary"
                 onClick={() => navigate(routeConstants.SIGN_IN)}
               >
                 Sign In
+              </button>
+            )}
+            {[USER_ROLE.SUPER_ADMIN, USER_ROLE.ADMIN].includes(
+              loginUserDetails?.role_id
+            ) && (
+              <button
+                className="btn-primary d-flex justify-content-center align-items-center gap-1"
+                onClick={() => {
+                  window.open(routeConstants.ADMIN_AUCTION_LIST);
+                }}
+              >
+                Admin Panel <MdArrowOutward />
               </button>
             )}
 
