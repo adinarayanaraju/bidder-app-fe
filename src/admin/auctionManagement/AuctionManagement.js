@@ -12,7 +12,10 @@ import {
   updateAuctionStatus,
 } from "../../redux/slices/admin/adminAuctionSlice";
 import Loader from "../../sharedComponents/loader/Loader";
-import { getAuctionCategoryLIst } from "../../redux/slices/auctionSlice";
+import {
+  deleteAuction,
+  getAuctionCategoryLIst,
+} from "../../redux/slices/auctionSlice";
 import MyAuctionFilter from "../../views/userProfile/components/MyAuctionFilter";
 import { routeConstants } from "../../utils/routeConstant";
 import ConfirmModal from "../../sharedComponents/confirmModal/ConfirmModal";
@@ -179,7 +182,26 @@ export default function AuctionManagement() {
     setFilterState({ ...filterState, [type]: selectedOption });
   };
 
-  const handleDelete = () => {};
+  const handleDelete = async () => {
+    try {
+      await dispatch(deleteAuction(selectedAuction?.id)).unwrap();
+
+      //Calculate the new records after delete
+      const remainingRecords = auctionList?.totalRecord - 1;
+
+      //Total page
+      const totalPages = Math.ceil(remainingRecords / perPageLimit);
+
+      if (page > totalPages) {
+        setPage((prev) => Math.max(prev - 1, 1));
+      } else {
+        await fetchAdminAuction();
+      }
+      setIsConfirmationShow(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const handleUpdateStatus = async (payload) => {
     try {
