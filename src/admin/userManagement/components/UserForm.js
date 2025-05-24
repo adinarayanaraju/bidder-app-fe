@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Col, Row } from "reactstrap";
 import CustomDropDown from "../../../sharedComponents/customDropDown/CustomDropDown";
-import { useSelector } from "react-redux";
-import { USER_ROLE } from "../../../utils/propertyResolver";
+import { useDispatch, useSelector } from "react-redux";
+import { SUCCESS_MESSAGE, USER_ROLE } from "../../../utils/propertyResolver";
 import CustomInput from "../../../sharedComponents/customInput/CustomInput";
-
+import { GrPowerReset } from "react-icons/gr";
+import { signupUser } from "../../../redux/slices/authSlice";
+import { showToast } from "../../../sharedComponents/toast/showTaost";
+import Loader from "../../../sharedComponents/loader/Loader";
 export default function UserForm() {
   const initialFormState = {
     role_id: "",
@@ -17,7 +20,10 @@ export default function UserForm() {
   const [userDetail, setUserDetail] = useState(initialFormState);
   const [error, setError] = useState(initialFormState);
 
+  const dispatch = useDispatch();
+
   const { loginUserInfo } = useSelector((state) => state.user);
+  const { isLoading } = useSelector((state) => state.auth);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,13 +33,13 @@ export default function UserForm() {
     }));
 
     //Clear the error for the field being type into
-    setError((prev)=>{
-      const newErrors ={...prev}
-      if(newErrors[name]){
+    setError((prev) => {
+      const newErrors = { ...prev };
+      if (newErrors[name]) {
         delete newErrors[name];
       }
-      return newErrors
-    })
+      return newErrors;
+    });
   };
 
   const validateFields = () => {
@@ -68,13 +74,32 @@ export default function UserForm() {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateFields()) {
-      //logic
+      try {
+        const payload = {
+          first_name: userDetail.first_name,
+          last_name: userDetail.first_name || "",
+          email: userDetail.email,
+          password: userDetail.password,
+          role_id: String(userDetail.role_id?.value),
+        };
+        await dispatch(signupUser(payload)).unwrap();
+        showToast(SUCCESS_MESSAGE.USER_CREATED, "success");
+        setUserDetail(initialFormState);
+      } catch (error) {
+        console.log("Error while api calling", error);
+      }
     }
+  };
+
+  const handleReset = () => {
+    setUserDetail(initialFormState);
+    setError(initialFormState);
   };
   return (
     <div className="user-form-wrapper">
+      {isLoading && <Loader />}
       <Row>
         <Col xs={12} sm={12} md={6} lg={4}>
           <CustomDropDown
@@ -146,6 +171,7 @@ export default function UserForm() {
             required
             onChange={handleInputChange}
             error={error?.password}
+            validationRegex="^.{0,8}$"
           />
         </Col>
         <Col xs={12} sm={12} md={6} lg={4}>
@@ -158,13 +184,16 @@ export default function UserForm() {
             required
             onChange={handleInputChange}
             error={error?.confirm_password}
+            validationRegex="^.{0,8}$"
           />
         </Col>
       </Row>
 
       <Row className="mt-3 d-flex justify-content-center align-items-center gap-2">
         <Col xs={12} sm={6} md={4} lg={2}>
-          <button className="secondary-button w-100">Reset</button>
+          <button className="secondary-button w-100" onClick={handleReset}>
+            Reset <GrPowerReset />
+          </button>
         </Col>
         <Col xs={12} sm={6} md={4} lg={2}>
           <button className="custom-button w-100" onClick={handleSubmit}>
