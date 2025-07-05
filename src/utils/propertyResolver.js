@@ -61,3 +61,9 @@ export const PAGINATION_CONSTANT = {
   PAGE_ONE: 1,
   PER_PAGE_LIMIT: 10,
 };
+
+export const USER_ROLE_LABEL = {
+  1: "Super Admin",
+  2: "Admin",
+  3: "User"
+}

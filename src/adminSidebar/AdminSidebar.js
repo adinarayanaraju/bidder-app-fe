@@ -37,6 +37,11 @@ export default function AdminSidebar() {
           label: "Create User",
           path: routeConstants.ADMIN_USER_CREATE,
         },
+        {
+          id: "userList",
+          label: "User List",
+          path: routeConstants.ADMIN_USER_LIST,
+        },
        
       ],
     },
