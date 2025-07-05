@@ -5,6 +5,7 @@ import authSlice, { logout } from "./slices/authSlice";
 import userSlice  from "./slices/userSlice";
 import bidSlice  from "./slices/bidSlice";
 import adminAuctionSlice  from "./slices/admin/adminAuctionSlice";
+import adminUserSlice  from "./slices/admin/adminUserSlice";
 
 const appReducer = combineReducers({
   test: testSlice,
@@ -12,7 +13,8 @@ const appReducer = combineReducers({
   auction: auctionSlice,
   user: userSlice,
   bid: bidSlice,
-  adminAuction: adminAuctionSlice
+  adminAuction: adminAuctionSlice,
+  adminUser: adminUserSlice
 });
 
 const rootReducer = (state, action) => {
