@@ -47,6 +47,10 @@ export default function CustomDropDown({
           isClearable={isClearable}
           isSearchable={isSearchable}
           components={animatedComponents}
+          menuPortalTarget={document.body} 
+          styles={{
+            menuPortal: (base) => ({ ...base, zIndex: 9999 })
+          }}
         />
         {error && <div className="invalid-feedback d-block">{error}</div>}
       </FormGroup>

@@ -9,12 +9,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAdminUserList } from "../../redux/slices/admin/adminUserSlice";
 import CustomBadge from "../../sharedComponents/customBadge/CustomBadge";
 import Loader from "../../sharedComponents/loader/Loader";
+import UserManagementFilter from "./components/UserManagementFilter";
 
 export default function UserManagement() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
   const [perPageLimit, setPerPageLimit] = useState(
     PAGINATION_CONSTANT.PER_PAGE_LIMIT
   );
+  const [filterState, setFilterState] = useState({
+    role: [],
+    status: [],
+    search: "",
+  });
 
   const { userList, isLoading } = useSelector((state) => state.adminUser);
   const dispatch = useDispatch();
@@ -24,9 +30,12 @@ export default function UserManagement() {
       getAdminUserList({
         page: page,
         limit: perPageLimit,
+        search: filterState?.search || "",
+        role_ids: filterState?.role?.map((item) => item?.value) || [],
+        is_active: filterState?.status?.map((item) => item?.value) || [],
       })
     );
-  }, [page, perPageLimit]);
+  }, [page, perPageLimit, filterState]);
 
   const columns = [
     {
@@ -79,10 +88,29 @@ export default function UserManagement() {
     setPerPageLimit(sizePerPage);
   };
 
+  const handleFilterApply = (value, key) => {
+    setPage(PAGINATION_CONSTANT.PAGE_ONE);
+    setFilterState((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleResetFilter = () => {
+    setPage(PAGINATION_CONSTANT.PAGE_ONE);
+    setFilterState({
+      role: [],
+      status: [],
+      search: "",
+    });
+  };
+
   return (
     <div className="user-management-wrapper  light-grey-bg h-100 p-3">
       {isLoading && <Loader />}
       <div className="table-card-wrapper">
+        <UserManagementFilter
+          filterState={filterState}
+          handleApply={handleFilterApply}
+          handleReset={handleResetFilter}
+        />
         <CustomTable
           columnData={columns}
           dataTable={userList?.data || []}

@@ -161,22 +161,36 @@ label {
   color: #ef4444;
 }
 
-.table-card-wrapper{
+.table-card-wrapper {
   background-color: #fff;
   padding: 10px;
   border-radius: 16px;
 }
 
-.light-grey-bg{
+.light-grey-bg {
   background-color: #f2f0f1;
 }
 
-.action-link{
+.action-link {
   color: #3b82f6;
   cursor: pointer;
 }
 
-.disable{
+.disable {
   cursor: not-allowed;
   color: #d7d3df;
+}
+
+.reset-filter-btn {
+  padding: 10px;
+  border: 1px solid $secondary-text;
+  border-radius: 5px;
+  background: transparent;
+  color: black;
+  min-width: 150px;
+  &:hover{
+    border: none;
+    background-color: rgb(89, 89, 248);
+    color: white;
+  }
 }

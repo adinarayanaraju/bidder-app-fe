@@ -8,7 +8,7 @@ export const SUCCESS_MESSAGE = {
   CREATED_AUCTION: "Auction created successfully",
   UPDATED_AUCTION: "Auction updated successfully",
   DELETED_AUCTION: "Auction deleted successfully",
-  USER_CREATED: "User created successfully"
+  USER_CREATED: "User created successfully",
 };
 
 export const CONSTANT_NAME = {
@@ -49,6 +49,26 @@ export const CONSTANT_NAME = {
       label: "Rejected",
     },
   ],
+  USER_STATUS_LIST: [
+    {
+      value: 1,
+      label: "Active",
+    },
+    {
+      value: 0,
+      label: "De Active",
+    },
+  ],
+  USER_ROLE_LIST: [
+    {
+      value: 2,
+      label: "Admin",
+    },
+    {
+      value: 3,
+      label: "User",
+    },
+  ],
 };
 
 export const USER_ROLE = {
@@ -65,5 +85,5 @@ export const PAGINATION_CONSTANT = {
 export const USER_ROLE_LABEL = {
   1: "Super Admin",
   2: "Admin",
-  3: "User"
-}
+  3: "User",
+};
