@@ -15,5 +15,7 @@ export const routeConstants = {
   AUCTION_UPDATE: `${modulePath.AUCTION}/update`,
   ADMIN_AUCTION_LIST: `${modulePath.ADMIN}${modulePath.AUCTION}/list`,
   ADMIN_USER_CREATE: `${modulePath.ADMIN}${modulePath.USER}/create`,
-  ADMIN_USER_LIST: `${modulePath.ADMIN}${modulePath.USER}/list`
+  ADMIN_USER_LIST: `${modulePath.ADMIN}${modulePath.USER}/list`,
+  ADMIN_USER_VIEW: `${modulePath.ADMIN}${modulePath.USER}/view`,
+  ADMIN_USER_EDIT: `${modulePath.ADMIN}${modulePath.USER}/edit`,
 };

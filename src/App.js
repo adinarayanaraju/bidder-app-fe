@@ -23,6 +23,8 @@ import UserLayout from "./layout/UserLayout";
 import AuctionManagement from "./admin/auctionManagement/AuctionManagement";
 import UserCreate from "./admin/userManagement/UserCreate";
 import UserManagement from "./admin/userManagement/UserManagement";
+import UserView from "./admin/userManagement/components/UserView";
+import UserUpdate from "./admin/userManagement/components/UserUpdate";
 function App() {
   const userRole = useSelector((state)=>state.user?.loginUserDetails?.role_id);
   return (
@@ -36,6 +38,8 @@ function App() {
               <Route path={routeConstants.ADMIN_AUCTION_LIST} element={<AuctionManagement />} />
               <Route path={routeConstants.ADMIN_USER_CREATE} element={<UserCreate />} />
               <Route path={routeConstants.ADMIN_USER_LIST} element={<UserManagement />} />
+              <Route path={`${routeConstants.ADMIN_USER_VIEW}/:id`} element={<UserView />} />
+              <Route path={`${routeConstants.ADMIN_USER_EDIT}/:id`} element={<UserUpdate />} />
             </Route>
           )}
 
