@@ -10,6 +10,8 @@ import { getAdminUserList } from "../../redux/slices/admin/adminUserSlice";
 import CustomBadge from "../../sharedComponents/customBadge/CustomBadge";
 import Loader from "../../sharedComponents/loader/Loader";
 import UserManagementFilter from "./components/UserManagementFilter";
+import { useNavigate } from "react-router-dom";
+import { routeConstants } from "../../utils/routeConstant";
 
 export default function UserManagement() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
@@ -24,6 +26,7 @@ export default function UserManagement() {
 
   const { userList, isLoading } = useSelector((state) => state.adminUser);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(
@@ -72,6 +75,36 @@ export default function UserManagement() {
       text: "Created At",
       dataField: "created_at",
       formatter: (cell) => formatDate(cell, "DD/MM/YYYY hh:mm A"),
+    },
+    {
+      text: "Action",
+      dataField: "action",
+      isDummyField: true,
+      formatter: (_, row) => {
+        return (
+          <div className="d-flex  gap-4">
+            <p
+              className="action-link"
+              onClick={() => {
+                navigate(`${routeConstants.ADMIN_USER_VIEW}/${row?.id}`);
+              }}
+            >
+              View
+            </p>
+            <p
+              className={`action-link`}
+              onClick={() => {
+                navigate(`${routeConstants.ADMIN_USER_EDIT}/${row?.id}`);
+              }}
+            >
+              Edit
+            </p>
+            <p className="action-link" onClick={() => {}}>
+              Delete
+            </p>
+          </div>
+        );
+      },
     },
   ];
 
