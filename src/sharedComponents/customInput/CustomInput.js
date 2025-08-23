@@ -12,6 +12,7 @@ export default function CustomInput({
   onKeyPress,
   error,
   validationRegex,
+  disabled
 }) {
   const handleChange = (e) => {
     const inputValue = e.target.value;
@@ -41,6 +42,7 @@ export default function CustomInput({
         required={required}
         onChange={handleChange}
         onKeyPress={onKeyPress}
+        disabled={disabled}
         className="input-box"
       />
       {error && <span className="error">{error}</span>}

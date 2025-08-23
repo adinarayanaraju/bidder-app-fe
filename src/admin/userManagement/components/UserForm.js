@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row } from "reactstrap";
 import CustomDropDown from "../../../sharedComponents/customDropDown/CustomDropDown";
 import { useDispatch, useSelector } from "react-redux";
-import { SUCCESS_MESSAGE, USER_ROLE } from "../../../utils/propertyResolver";
+import {
+  SUCCESS_MESSAGE,
+  USER_ROLE,
+  USER_ROLE_LABEL,
+} from "../../../utils/propertyResolver";
 import CustomInput from "../../../sharedComponents/customInput/CustomInput";
 import { GrPowerReset } from "react-icons/gr";
 import { signupUser } from "../../../redux/slices/authSlice";
 import { showToast } from "../../../sharedComponents/toast/showTaost";
 import Loader from "../../../sharedComponents/loader/Loader";
-export default function UserForm() {
+import { useNavigate } from "react-router-dom";
+import { routeConstants } from "../../../utils/routeConstant";
+export default function UserForm({ data = {}, formType = null }) {
   const initialFormState = {
     role_id: "",
     first_name: "",
@@ -21,9 +27,26 @@ export default function UserForm() {
   const [error, setError] = useState(initialFormState);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { loginUserInfo } = useSelector((state) => state.user);
   const { isLoading } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (formType === "view" && data && Object.keys(data).length > 0) {
+      setUserDetail({
+        role_id: {
+          label: USER_ROLE_LABEL[data?.role_id],
+          value: data?.role_id,
+        },
+        first_name: data?.first_name || "",
+        last_name: data?.last_name || "",
+        email: data?.email || "",
+        password: "",
+        confirm_password: "",
+      });
+    }
+  }, [data, formType]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -119,6 +142,7 @@ export default function UserForm() {
             ]}
             required
             error={error?.role_id}
+            disabled={formType === "view"}
           />
         </Col>
         <Col xs={12} sm={12} md={6} lg={4}>
@@ -132,6 +156,7 @@ export default function UserForm() {
             onChange={handleInputChange}
             error={error?.first_name}
             validationRegex="^[A-Za-z][A-Za-z ]*$"
+            disabled={formType === "view"}
           />
         </Col>
         <Col xs={12} sm={12} md={6} lg={4}>
@@ -145,6 +170,7 @@ export default function UserForm() {
             onChange={handleInputChange}
             error={error?.last_name}
             validationRegex="^[A-Za-z][A-Za-z ]*$"
+            disabled={formType === "view"}
           />
         </Col>
 
@@ -158,6 +184,7 @@ export default function UserForm() {
             required
             onChange={handleInputChange}
             error={error?.email}
+            disabled={formType === "view"}
           />
         </Col>
 
@@ -172,6 +199,7 @@ export default function UserForm() {
             onChange={handleInputChange}
             error={error?.password}
             validationRegex="^.{0,8}$"
+            disabled={formType === "view"}
           />
         </Col>
         <Col xs={12} sm={12} md={6} lg={4}>
@@ -185,21 +213,35 @@ export default function UserForm() {
             onChange={handleInputChange}
             error={error?.confirm_password}
             validationRegex="^.{0,8}$"
+            disabled={formType === "view"}
           />
         </Col>
       </Row>
 
       <Row className="mt-3 d-flex justify-content-center align-items-center gap-2">
-        <Col xs={12} sm={6} md={4} lg={2}>
-          <button className="secondary-button w-100" onClick={handleReset}>
-            Reset <GrPowerReset />
-          </button>
-        </Col>
-        <Col xs={12} sm={6} md={4} lg={2}>
-          <button className="custom-button w-100" onClick={handleSubmit}>
-            Submit
-          </button>
-        </Col>
+        {formType === "view" ? (
+          <Col xs={12} sm={6} md={4} lg={2}>
+            <button
+              className="custom-button w-100"
+              onClick={() => navigate(routeConstants.ADMIN_USER_LIST)}
+            >
+              Go Back
+            </button>
+          </Col>
+        ) : (
+          <>
+            <Col xs={12} sm={6} md={4} lg={2}>
+              <button className="secondary-button w-100" onClick={handleReset}>
+                Reset <GrPowerReset />
+              </button>
+            </Col>
+            <Col xs={12} sm={6} md={4} lg={2}>
+              <button className="custom-button w-100" onClick={handleSubmit}>
+                Submit
+              </button>
+            </Col>
+          </>
+        )}
       </Row>
     </div>
   );

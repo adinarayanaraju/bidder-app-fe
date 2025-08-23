@@ -18,4 +18,5 @@ export const API_END_POINT = {
   ADMIN_AUCTION_LIST: "/admin/auctions",
   UPDATE_AUCTION_STATUS: "/admin/auction/update/status",
   ADMIN_USER_LIST: "/admin/user-list",
+  GET_USER_DETAIL_BY_ID: "/user/user-detail"
 };
