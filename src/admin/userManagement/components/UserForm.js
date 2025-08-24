@@ -14,6 +14,7 @@ import { showToast } from "../../../sharedComponents/toast/showTaost";
 import Loader from "../../../sharedComponents/loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { routeConstants } from "../../../utils/routeConstant";
+import { updateUserDetailById } from "../../../redux/slices/userSlice";
 export default function UserForm({ data = {}, formType = null }) {
   const initialFormState = {
     role_id: "",
@@ -33,7 +34,11 @@ export default function UserForm({ data = {}, formType = null }) {
   const { isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (formType === "view" && data && Object.keys(data).length > 0) {
+    if (
+      ["view", "edit"].includes(formType) &&
+      data &&
+      Object.keys(data).length > 0
+    ) {
       setUserDetail({
         role_id: {
           label: USER_ROLE_LABEL[data?.role_id],
@@ -76,12 +81,15 @@ export default function UserForm({ data = {}, formType = null }) {
     } else if (!emailRegex.test(userDetail?.email)) {
       newErrors.email = "Invalid email format";
     }
-    if (!userDetail?.password.trim()) {
+    if (!userDetail?.password.trim() && formType !== "edit") {
       newErrors.password = "Password is required";
-    } else if (userDetail?.password.trim()?.length < 6) {
+    } else if (
+      userDetail?.password.trim()?.length > 0 &&
+      userDetail?.password.trim()?.length < 6
+    ) {
       newErrors.password = "Password must be at least 6 characters";
     }
-    if (!userDetail?.confirm_password.trim()) {
+    if (!userDetail?.confirm_password.trim() && formType !== "edit") {
       newErrors.confirm_password = "Confirm password is required";
     } else if (userDetail.password !== userDetail.confirm_password) {
       newErrors.confirm_password = "Passwords do not match";
@@ -119,6 +127,25 @@ export default function UserForm({ data = {}, formType = null }) {
   const handleReset = () => {
     setUserDetail(initialFormState);
     setError(initialFormState);
+  };
+
+  const updateUserDetails = async () => {
+    if (validateFields()) {
+      try {
+        const payload = {
+          first_name: userDetail.first_name,
+          last_name: userDetail.first_name || "",
+          email: userDetail.email,
+           ...(userDetail?.password ? { password: userDetail.password } : {}),
+          role_id: String(userDetail.role_id?.value),
+          userId: data?.id,
+        };
+        await dispatch(updateUserDetailById(payload)).unwrap();
+        showToast(SUCCESS_MESSAGE.USER_UPDATED, "success");
+      } catch (error) {
+        console.log("Error while api calling", error);
+      }
+    }
   };
   return (
     <div className="user-form-wrapper">
@@ -195,7 +222,7 @@ export default function UserForm({ data = {}, formType = null }) {
             name="password"
             value={userDetail?.password}
             placeholder="Enter password"
-            required
+            required={formType !== "edit"}
             onChange={handleInputChange}
             error={error?.password}
             validationRegex="^.{0,8}$"
@@ -209,7 +236,7 @@ export default function UserForm({ data = {}, formType = null }) {
             name="confirm_password"
             value={userDetail?.confirm_password}
             placeholder="Enter confirm password"
-            required
+            required={formType !== "edit"}
             onChange={handleInputChange}
             error={error?.confirm_password}
             validationRegex="^.{0,8}$"
@@ -236,8 +263,11 @@ export default function UserForm({ data = {}, formType = null }) {
               </button>
             </Col>
             <Col xs={12} sm={6} md={4} lg={2}>
-              <button className="custom-button w-100" onClick={handleSubmit}>
-                Submit
+              <button
+                className="custom-button w-100"
+                onClick={formType === "edit" ? updateUserDetails : handleSubmit}
+              >
+                {formType === "edit" ? "Update" : "Submit"}
               </button>
             </Col>
           </>

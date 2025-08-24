@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { API_END_POINT } from "../../utils/apiEndPoints";
-import { GET } from "../../services/axiosRequestHandler";
+import { GET, POST } from "../../services/axiosRequestHandler";
 import { ERROR_MESSAGE } from "../../utils/propertyResolver";
 import { showToast } from "../../sharedComponents/toast/showTaost";
 
@@ -8,7 +8,7 @@ const userInitialState = {
   isLoading: false,
   error: null,
   loginUserDetails: {},
-  userDetailById:{}
+  userDetailById: {},
 };
 
 export const getLoginUserDetail = createAsyncThunk(
@@ -63,6 +63,34 @@ export const getUserDetailById = createAsyncThunk(
   }
 );
 
+export const updateUserDetailById = createAsyncThunk(
+  "auction/updateUserDetailById",
+  async (payload, thunkApi) => {
+    try {
+      const response = await POST(
+        API_END_POINT.UPDATE_USER_DETAIL_BY_ID,
+        payload
+      );
+      if (response?.status === 200) {
+        return response?.response?.data?.data;
+      } else {
+        showToast(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+          "error"
+        );
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState: userInitialState,
@@ -92,6 +120,16 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
         state.userDetailById = {};
+      })
+      .addCase(updateUserDetailById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUserDetailById.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(updateUserDetailById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
