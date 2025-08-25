@@ -31,19 +31,20 @@ export default function AdminSidebar() {
       id: "userManagement",
       label: "User Management",
       icon: <FaUsers />,
-      children: [
-        {
-          id: "createUser",
-          label: "Create User",
-          path: routeConstants.ADMIN_USER_CREATE,
-        },
-        {
-          id: "userList",
-          label: "User List",
-          path: routeConstants.ADMIN_USER_LIST,
-        },
+      path: routeConstants.ADMIN_USER_LIST,
+      // children: [
+      //   {
+      //     id: "createUser",
+      //     label: "Create User",
+      //     path: routeConstants.ADMIN_USER_CREATE,
+      //   },
+      //   {
+      //     id: "userList",
+      //     label: "User List",
+      //     path: routeConstants.ADMIN_USER_LIST,
+      //   },
        
-      ],
+      // ],
     },
   ];
   const handleNavigation = (path) => {

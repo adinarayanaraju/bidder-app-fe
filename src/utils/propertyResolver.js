@@ -9,7 +9,8 @@ export const SUCCESS_MESSAGE = {
   UPDATED_AUCTION: "Auction updated successfully",
   DELETED_AUCTION: "Auction deleted successfully",
   USER_CREATED: "User created successfully",
-  USER_UPDATED: "User updated successfully"
+  USER_UPDATED: "User updated successfully",
+  DELETE_USER: "User deleted successfully"
 };
 
 export const CONSTANT_NAME = {
