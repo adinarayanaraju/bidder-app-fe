@@ -12,6 +12,8 @@ import Loader from "../../sharedComponents/loader/Loader";
 import UserManagementFilter from "./components/UserManagementFilter";
 import { useNavigate } from "react-router-dom";
 import { routeConstants } from "../../utils/routeConstant";
+import ConfirmModal from "../../sharedComponents/confirmModal/ConfirmModal";
+import { deleteUserById } from "../../redux/slices/userSlice";
 
 export default function UserManagement() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
@@ -23,6 +25,8 @@ export default function UserManagement() {
     status: [],
     search: "",
   });
+  const [isConfirmShow, setIsConfirmShow] = useState(false);
+  const [rowUser, setRowUser] = useState({});
 
   const { userList, isLoading } = useSelector((state) => state.adminUser);
   const dispatch = useDispatch();
@@ -99,7 +103,13 @@ export default function UserManagement() {
             >
               Edit
             </p>
-            <p className="action-link" onClick={() => {}}>
+            <p
+              className="action-link"
+              onClick={() => {
+                setIsConfirmShow(true);
+                setRowUser(row);
+              }}
+            >
               Delete
             </p>
           </div>
@@ -135,6 +145,35 @@ export default function UserManagement() {
     });
   };
 
+  const handleDelete = async () => {
+    try {
+      await dispatch(deleteUserById(rowUser?.id)).unwrap();
+
+      //Calculate the new records after delete
+      const remainingRecords = userList?.totalRecord - 1;
+
+      //Total page
+      const totalPages = Math.ceil(remainingRecords / perPageLimit);
+
+      if (page > totalPages) {
+        setPage((prev) => Math.max(prev - 1, 1));
+      } else {
+        await dispatch(
+          getAdminUserList({
+            page: page,
+            limit: perPageLimit,
+            search: filterState?.search || "",
+            role_ids: filterState?.role?.map((item) => item?.value) || [],
+            is_active: filterState?.status?.map((item) => item?.value) || [],
+          })
+        );
+      }
+      setIsConfirmShow(false);
+    } catch (error) {
+      console.log("Error while deleting user", error);
+    }
+  };
+
   return (
     <div className="user-management-wrapper  light-grey-bg h-100 p-3">
       {isLoading && <Loader />}
@@ -157,6 +196,20 @@ export default function UserManagement() {
           sort={true}
         />
       </div>
+      {isConfirmShow && (
+        <ConfirmModal
+          isOpen={isConfirmShow}
+          toggle={() => {
+            setIsConfirmShow(!isConfirmShow);
+          }}
+          title="Confirm Action"
+          message={`Are you sure you want to delete "${rowUser?.first_name} ${rowUser?.last_name}" user?`}
+          isWarningIconShow={true}
+          confirmText="Yes, Confirm"
+          cancelText="Cancel"
+          onConfirm={handleDelete}
+        />
+      )}
     </div>
   );
 }

@@ -245,9 +245,8 @@ export default function UserForm({ data = {}, formType = null }) {
         </Col>
       </Row>
 
-      <Row className="mt-3 d-flex justify-content-center align-items-center gap-2">
-        {formType === "view" ? (
-          <Col xs={12} sm={6} md={4} lg={2}>
+      <Row className="mt-4 d-flex justify-content-between align-items-center gap-2">
+        <Col xs={12} sm={6} md={4} lg={2}>
             <button
               className="custom-button w-100"
               onClick={() => navigate(routeConstants.ADMIN_USER_LIST)}
@@ -255,21 +254,24 @@ export default function UserForm({ data = {}, formType = null }) {
               Go Back
             </button>
           </Col>
+        {formType === "view" ? (
+          null
         ) : (
           <>
-            <Col xs={12} sm={6} md={4} lg={2}>
-              <button className="secondary-button w-100" onClick={handleReset}>
+            <Col xs={12} sm={6} md={4} lg={4}>
+              <div className="d-flex gap-2">
+                <button className="secondary-button w-100" onClick={handleReset}>
                 Reset <GrPowerReset />
               </button>
-            </Col>
-            <Col xs={12} sm={6} md={4} lg={2}>
-              <button
+               <button
                 className="custom-button w-100"
                 onClick={formType === "edit" ? updateUserDetails : handleSubmit}
               >
                 {formType === "edit" ? "Update" : "Submit"}
               </button>
+              </div>
             </Col>
+           
           </>
         )}
       </Row>

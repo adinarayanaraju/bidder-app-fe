@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { API_END_POINT } from "../../utils/apiEndPoints";
-import { GET, POST } from "../../services/axiosRequestHandler";
-import { ERROR_MESSAGE } from "../../utils/propertyResolver";
+import { DELETE, GET, POST } from "../../services/axiosRequestHandler";
+import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../../utils/propertyResolver";
 import { showToast } from "../../sharedComponents/toast/showTaost";
 
 const userInitialState = {
@@ -91,6 +91,38 @@ export const updateUserDetailById = createAsyncThunk(
   }
 );
 
+export const deleteUserById = createAsyncThunk(
+  "user/deleteUserById",
+  async (id, thunkApi) => {
+    try {
+      const response = await DELETE(
+        `${API_END_POINT.DELETE_USER_BY_ID}/${id}`
+      );
+      if (response?.status === 200) {
+        showToast(
+          response?.response?.data?.message ||
+            SUCCESS_MESSAGE.DELETE_USER,
+          "success"
+        );
+        return response?.response?.data?.data;
+      } else {
+        showToast(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+          "error"
+        );
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState: userInitialState,
@@ -128,6 +160,16 @@ export const userSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(updateUserDetailById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteUserById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteUserById.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteUserById.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import DynamicFilterRenderer from "../../../sharedComponents/dynamicFilter/DynamicFilter";
 import { CONSTANT_NAME, USER_ROLE } from "../../../utils/propertyResolver";
 import { useSelector } from "react-redux";
+import { Button, Col, Row } from "reactstrap";
+import { useNavigate } from "react-router-dom";
+import { routeConstants } from "../../../utils/routeConstant";
 
 export default function UserManagementFilter({
   handleApply,
@@ -9,6 +12,7 @@ export default function UserManagementFilter({
   handleReset,
 }) {
   const { loginUserDetails } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   const filterConfig = [
     {
@@ -48,11 +52,18 @@ export default function UserManagementFilter({
 
   return (
     <>
-      <DynamicFilterRenderer
-        configList={filterConfig}
-        handleApply={handleApply}
-        handleReset={handleReset}
-      />
+      <Row>
+        <Col md={11}>
+          <DynamicFilterRenderer
+            configList={filterConfig}
+            handleApply={handleApply}
+            handleReset={handleReset}
+          />
+        </Col>
+        <Col md={1}>
+          <Button onClick={()=>navigate(routeConstants.ADMIN_USER_CREATE)}>Create User</Button>
+        </Col>
+      </Row>
     </>
   );
 }
