@@ -65,6 +65,11 @@ export default function MyAuctionList() {
       },
     },
     {
+      text: "Total Bids",
+      dataField: "totalBids",
+      sort: false,
+    },
+    {
       text: "Base Price",
       dataField: "base_price",
       sort: false,
