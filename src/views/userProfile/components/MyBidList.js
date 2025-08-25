@@ -12,6 +12,7 @@ import Loader from "../../../sharedComponents/loader/Loader";
 import NoRecord from "../../../sharedComponents/noRecord/NoRecord";
 import { getMyBidList } from "../../../redux/slices/bidSlice";
 import MyBidFilter from "./MyBidFilter";
+import CustomBadge from "../../../sharedComponents/customBadge/CustomBadge";
 
 export default function MyBidList() {
   const [page, setPage] = useState(PAGINATION_CONSTANT.PAGE_ONE);
@@ -46,6 +47,16 @@ export default function MyBidList() {
       },
     },
     {
+      text: "Status",
+      dataField:"bids[0].bid_status",
+      formatter: (cell)=>{
+        return  <CustomBadge
+          title={cell}
+          colorCode={cell === "accepted" ? "green" : "red"}
+        />
+      }
+    },
+    {
       text: "Auction Base Price",
       dataField: "base_price",
       sort: false,
@@ -72,10 +83,10 @@ export default function MyBidList() {
       dataField: "creator.first_name",
       formatter: (cell) => capitalizeFirstChar(cell),
     },
-    {
-      text: "Auction Owner Email",
-      dataField: "creator.email",
-    },
+    // {
+    //   text: "Auction Owner Email",
+    //   dataField: "creator.email",
+    // },
     {
       text: "Created At",
       dataField: "created_at",
