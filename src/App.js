@@ -25,6 +25,7 @@ import UserCreate from "./admin/userManagement/UserCreate";
 import UserManagement from "./admin/userManagement/UserManagement";
 import UserView from "./admin/userManagement/components/UserView";
 import UserUpdate from "./admin/userManagement/components/UserUpdate";
+import AuctionBids from "./views/auctionBids/AuctionBids";
 function App() {
   const userRole = useSelector((state)=>state.user?.loginUserDetails?.role_id);
   return (
@@ -76,6 +77,10 @@ function App() {
             <Route
               path={`${routeConstants.AUCTION_UPDATE}/:auction_id`}
               element={<UpdateAuction />}
+            />
+             <Route
+              path={`${routeConstants.AUCTION_BID_LIST}/:auction_id`}
+              element={<AuctionBids />}
             />
             {/* Protected routes */}
             <Route

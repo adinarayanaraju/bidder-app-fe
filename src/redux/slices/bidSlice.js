@@ -11,6 +11,7 @@ const bidInitialState = {
     data: [],
     totalRecord: 0,
   },
+  auctionBidList: {},
 };
 
 export const getMyBidList = createAsyncThunk(
@@ -23,6 +24,33 @@ export const getMyBidList = createAsyncThunk(
           data: response?.response?.data?.data?.auctions || [],
           totalRecord: response?.response?.data?.data?.pagination?.total,
         };
+      } else {
+        showToast(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG,
+          "error"
+        );
+        return thunkApi.rejectWithValue(
+          response?.response?.data?.message ||
+            ERROR_MESSAGE.SOMETHING_WENT_WRONG
+        );
+      }
+    } catch (error) {
+      showToast(error.message || ERROR_MESSAGE.SOMETHING_WENT_WRONG, "error");
+      return thunkApi.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getBidListByAuctionId = createAsyncThunk(
+  "bid/getBidListByAuctionId",
+  async (auction_id, thunkApi) => {
+    try {
+      const response = await GET(
+        `${API_END_POINT.GET_BID_LIST_BY_AUCTION_ID}/${auction_id}`
+      );
+      if (response?.status === 200) {
+        return response?.response?.data?.data;
       } else {
         showToast(
           response?.response?.data?.message ||
@@ -61,6 +89,18 @@ export const bidSlice = createSlice({
           data: [],
           totalRecord: 0,
         };
+      })
+      .addCase(getBidListByAuctionId.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getBidListByAuctionId.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.auctionBidList = action.payload;
+      })
+      .addCase(getBidListByAuctionId.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.auctionBidList = {};
       });
   },
 });
