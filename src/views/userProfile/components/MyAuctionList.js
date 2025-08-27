@@ -209,7 +209,9 @@ export default function MyAuctionList() {
       setFilterState({ ...filterState, search: selectedOption });
     }
   };
-
+  const rowEventClickCallback = (e, row) =>{
+    window.open(`${routeConstants.AUCTION_BID_LIST}/${row?.id}`)
+  }
   const toggleModal = () => setIsConfirmationShow(!isConfirmationShow);
   return (
     <div>
@@ -232,6 +234,7 @@ export default function MyAuctionList() {
             cellEdit={false}
             onTableChange={onTableChange}
             sort={true}
+            rowEventClickCallback={rowEventClickCallback}
           />
         )}
 

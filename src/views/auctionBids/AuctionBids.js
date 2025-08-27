@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Row,
   Col,
@@ -10,103 +10,95 @@ import {
 } from "reactstrap";
 import "./auctionBids.scss";
 import CustomBadge from "../../sharedComponents/customBadge/CustomBadge";
-// Dummy bids data (replace with API/state later)
-const bids = [
-  {
-    id: 1,
-    bidder: {
-      name: "John Doe",
-      email: "john@example.com",
-      avatar: "https://i.pravatar.cc/60?img=1",
-    },
-    amount: 250,
-    placedAt: "2025-08-23T10:30:00",
-    status: "pending",
-  },
-  {
-    id: 2,
-    bidder: {
-      name: "Jane Smith",
-      email: "jane@example.com",
-      avatar: "https://i.pravatar.cc/60?img=2",
-    },
-    amount: 300,
-    placedAt: "2025-08-23T11:00:00",
-    status: "approved",
-  },
-  {
-    id: 3,
-    bidder: {
-      name: "Michael Johnson",
-      email: "mike@example.com",
-      avatar: "https://i.pravatar.cc/60?img=3",
-    },
-    amount: 280,
-    placedAt: "2025-08-23T12:00:00",
-    status: "rejected",
-  },
-  {
-    id: 3,
-    bidder: {
-      name: "Michael Johnson",
-      email: "mike@example.com",
-      avatar: "https://i.pravatar.cc/60?img=3",
-    },
-    amount: 280,
-    placedAt: "2025-08-23T12:00:00",
-    status: "rejected",
-  },
-];
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getBidListByAuctionId } from "../../redux/slices/bidSlice";
+import Loader from "../../sharedComponents/loader/Loader";
+import { capitalizeFirstChar, formatDate } from "../../utils/commonFunction";
+import CustomAvatar from "../../sharedComponents/customAvatar/CustomAvatar";
+import NoRecord from "../../sharedComponents/noRecord/NoRecord";
 
 export default function AuctionBids() {
+  const params = useParams();
+  const dispatch = useDispatch();
+  const { auctionBidList, isLoading } = useSelector((state) => state.bid);
+
+  useEffect(() => {
+    if (params.auction_id) {
+      dispatch(getBidListByAuctionId(params.auction_id));
+    }
+  }, [params?.auction_id]);
   return (
     <div className="auction-bids-wrapper p-4">
+      {isLoading && <Loader />}
       <Col md="12">
-        <h4 className="mb-4">Bids for Auction #12345</h4>
+        <h4 className="mb-4">
+          Bids for Auction #{params?.auction_id}~
+          {auctionBidList?.auction?.item_name}
+        </h4>
 
         <Row>
-          {bids.map((bid) => (
-            <Col md="6" lg="3" key={bid.id} className="mb-4">
+          {auctionBidList?.bids?.map((bid) => (
+            <Col md="6" lg="3" key={bid?.id} className="mb-4">
               <Card className="shadow-sm h-100">
                 <CardBody>
                   {/* Bidder Info */}
                   <div className="bidder-info">
-                    <img
+                    {/* <img
                       src={bid.bidder.avatar}
                       alt=""
                       className="rounded-circle me-3"
+                    /> */}
+                    <CustomAvatar
+                      firstName={bid?.bidder?.first_name}
+                      lastName={bid?.bidder?.last_name}
+                      className="rounded-circle me-3"
                     />
                     <div>
-                      <h6 className="mb-0">{bid.bidder.name}</h6>
-                      <small className="text-muted">{bid.bidder.email}</small>
+                      <h6 className="mb-0">
+                        {capitalizeFirstChar(bid?.bidder?.first_name)}{" "}
+                        {bid?.bidder?.last_name}
+                      </h6>
+                      <small className="text-muted">{bid?.bidder?.email}</small>
                     </div>
                   </div>
 
                   {/* Bid Details */}
                   <div className="bid-details">
                     <div>
-                      <strong>Bid Amount:</strong> <span>${bid.amount}</span>
+                      <strong>Bid Amount:</strong>{" "}
+                      <span>&#8377; {bid?.bid_amount}</span>
                     </div>
                     <div>
                       <strong>Placed At:</strong>{" "}
-                      <span>{new Date(bid.placedAt).toLocaleString()}</span>
+                      <span>{formatDate(bid?.crated_at, "DD-MMM-YYYY")}</span>
                     </div>
                   </div>
 
                   {/* Status Badge */}
                   <div className="mb-3">
                     <CustomBadge
-                      title={bid.status}
-                      colorCode={bid.status === "approved" ? "green" : "red"}
+                      title={bid?.bid_status}
+                      colorCode={
+                        bid?.bid_status === "accepted" ? "green" : "red"
+                      }
                     />
                   </div>
 
                   {/* Action Buttons */}
                   <div className="action-buttons">
-                    <Button color="success" size="sm">
+                    <Button
+                      color="success"
+                      size="sm"
+                      disabled={bid?.bid_status !== "pending"}
+                    >
                       Approve
                     </Button>
-                    <Button color="danger" size="sm">
+                    <Button
+                      color="danger"
+                      size="sm"
+                      disabled={bid?.bid_status !== "pending"}
+                    >
                       Reject
                     </Button>
                   </div>
@@ -114,6 +106,11 @@ export default function AuctionBids() {
               </Card>
             </Col>
           ))}
+          {auctionBidList?.bids?.length === 0 && (
+            <div style={{ height: "800px" }}>
+              <NoRecord />
+            </div>
+          )}
         </Row>
       </Col>
     </div>

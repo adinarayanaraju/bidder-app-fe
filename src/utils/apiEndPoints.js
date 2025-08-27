@@ -20,5 +20,6 @@ export const API_END_POINT = {
   ADMIN_USER_LIST: "/admin/user-list",
   GET_USER_DETAIL_BY_ID: "/user/user-detail",
   UPDATE_USER_DETAIL_BY_ID: "/user/update-user",
-  DELETE_USER_BY_ID: "/user/delete-user"
+  DELETE_USER_BY_ID: "/user/delete-user",
+  GET_BID_LIST_BY_AUCTION_ID: "/bid/by-auction",
 };

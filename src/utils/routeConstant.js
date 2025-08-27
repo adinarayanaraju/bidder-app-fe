@@ -18,4 +18,5 @@ export const routeConstants = {
   ADMIN_USER_LIST: `${modulePath.ADMIN}${modulePath.USER}/list`,
   ADMIN_USER_VIEW: `${modulePath.ADMIN}${modulePath.USER}/view`,
   ADMIN_USER_EDIT: `${modulePath.ADMIN}${modulePath.USER}/edit`,
+  AUCTION_BID_LIST: `${modulePath.AUCTION}/bid`
 };
