@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -17,17 +17,38 @@ import Loader from "../../sharedComponents/loader/Loader";
 import { capitalizeFirstChar, formatDate } from "../../utils/commonFunction";
 import CustomAvatar from "../../sharedComponents/customAvatar/CustomAvatar";
 import NoRecord from "../../sharedComponents/noRecord/NoRecord";
+import ConfirmModal from "../../sharedComponents/confirmModal/ConfirmModal";
 
 export default function AuctionBids() {
   const params = useParams();
   const dispatch = useDispatch();
   const { auctionBidList, isLoading } = useSelector((state) => state.bid);
+  const [isConfirmationShow, setIsConfirmationShow] = useState(false);
+  const [selectedBid, setSelectedBid] = useState(null);
+  const [actionType, setActionType] = useState("") //approve || reject
 
   useEffect(() => {
     if (params.auction_id) {
       dispatch(getBidListByAuctionId(params.auction_id));
     }
   }, [params?.auction_id]);
+
+  const toggleModal = () => setIsConfirmationShow(!isConfirmationShow);
+
+  const handleActionClick = (bid, type)  =>{
+    setSelectedBid(bid);
+    setActionType(type);
+    setIsConfirmationShow(true)
+  }
+
+  const handleConfirm = ()=>{
+    if(actionType === "approve"){
+      //
+    }else{
+
+    }
+    toggleModal()
+  }
   return (
     <div className="auction-bids-wrapper p-4">
       {isLoading && <Loader />}
@@ -91,6 +112,7 @@ export default function AuctionBids() {
                       color="success"
                       size="sm"
                       disabled={bid?.bid_status !== "pending"}
+                      onClick={()=>handleActionClick(bid, "approve")}
                     >
                       Approve
                     </Button>
@@ -98,6 +120,7 @@ export default function AuctionBids() {
                       color="danger"
                       size="sm"
                       disabled={bid?.bid_status !== "pending"}
+                      onClick={()=>handleActionClick(bid, "reject")}
                     >
                       Reject
                     </Button>
@@ -113,6 +136,20 @@ export default function AuctionBids() {
           )}
         </Row>
       </Col>
+      {
+        isConfirmationShow && (
+          <ConfirmModal
+            isOpen={isConfirmationShow}
+            toggle={toggleModal}
+            title="Confirm Action"
+            message={`Are you sure want to ${actionType} this bid of ₹${selectedBid?.bid_amount}`}
+            isWarningIconShow={true}
+            confirmText="Yes, Confirm"
+            cancelText="Cancel"
+            onConfirm={handleConfirm}
+          />
+        )
+      }
     </div>
   );
 }
