@@ -7,5 +7,9 @@ export const routeConstants = {
   FORGOT_PASSWORD: `${modulePath.AUTH}/forgot-password`,
   RESET_PASSWORD: `${modulePath.AUTH}/reset-password/:token`,
   VERIFY_ACCOUNT: `${modulePath.AUTH}/verify-account/:token`,
-  AUCTION_DETAIL: `${modulePath.AUCTION}/detail`
+  AUCTION_DETAIL: `${modulePath.AUCTION}/detail`,
+  AUCTION_CREATE: `${modulePath.AUCTION}/create`,
+  PERMISSION_DENIED: `${modulePath.PERMISSION}`,
+  AUCTION_LIST: `${modulePath.AUCTION}`,
+  USER_PROFILE: `${modulePath.USER}/profile`,
 };

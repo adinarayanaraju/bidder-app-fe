@@ -36,7 +36,9 @@ export default function AuctionDetails() {
       {isLoading ? (
         <Loader />
       ) : !auctionDetail && !isLoading ? (
-        <NoRecord />
+        <div style={{ height: "80vh" }}>
+          <NoRecord />
+        </div>
       ) : (
         <div className="auction-detail-wrapper">
           <CustomBreadCrumb

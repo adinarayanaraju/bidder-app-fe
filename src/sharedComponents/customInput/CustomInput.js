@@ -11,10 +11,27 @@ export default function CustomInput({
   onChange,
   onKeyPress,
   error,
+  validationRegex,
 }) {
+  const handleChange = (e) => {
+    const inputValue = e.target.value;
+    if (validationRegex) {
+      const regex = new RegExp(validationRegex);
+      if (inputValue === "" || regex.test(inputValue)) {
+        onChange?.(e);
+      }
+    } else {
+      onChange?.(e);
+    }
+  };
   return (
     <div className="custom-input-wrapper">
-      {label && <Label for={name}>{label}</Label>}
+      {label && (
+        <Label for={name}>
+          {label}
+          {required && <span className="text-danger ms-1">*</span>}
+        </Label>
+      )}
       <Input
         id={name}
         type={type}
@@ -22,7 +39,7 @@ export default function CustomInput({
         value={value}
         placeholder={placeholder}
         required={required}
-        onChange={onChange}
+        onChange={handleChange}
         onKeyPress={onKeyPress}
         className="input-box"
       />

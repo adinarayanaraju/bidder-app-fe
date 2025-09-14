@@ -27,7 +27,7 @@ export default function Header() {
     },
     {
       id: 2,
-      path: "/auctions",
+      path: routeConstants.AUCTION_LIST,
       label: "Auctions",
     },
     {
@@ -49,6 +49,10 @@ export default function Header() {
     dispatch(logout());
     toggleModal();
     navigate(routeConstants.HOME_PAGE);
+  };
+
+  const handleUserIconClick = () => {
+    navigate(routeConstants.USER_PROFILE);
   };
 
   return (
@@ -86,7 +90,12 @@ export default function Header() {
                   alt="notification"
                   className="icon"
                 />
-                <img src={userIcon} alt="user login" className="icon" />
+                <img
+                  src={userIcon}
+                  alt="user login"
+                  className="icon"
+                  onClick={handleUserIconClick}
+                />
               </>
             )}
             {isUserLogin ? (

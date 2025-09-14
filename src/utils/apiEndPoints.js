@@ -6,5 +6,9 @@ export const API_END_POINT = {
   RESET_PASSWORD:"/auth/reset-password/",
   GET_AUCTION_LIST:"/auction",
   GET_AUCTION_DETAIL_BY_ID: "/auction/auction-detail",
-  BID_APPLY: "/bid/create"
+  BID_APPLY: "/bid/create",
+  GET_AUCTION_CATEGORY_LIST:"/auction-category",
+  GET_PRESIGNED_URL:"/aws/get-presigned-url",
+  CREATE_AUCTION:"/auction/create",
+  MY_AUCTION_LIST: "/auction/my-auction"
 };
