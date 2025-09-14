@@ -1,0 +1,159 @@
+// Import color variables
+@import "../../style/variables";
+
+.signup-wrapper {
+  background-color: $background-grey;
+  padding: 40px;
+  .signup-card {
+    border-radius: 20px;
+    background: $white;
+
+    .form-section {
+      padding: 80px 60px;
+
+      .heading {
+        h2 {
+          font-family: "Roboto", sans-serif;
+          font-size: 40px;
+          font-weight: 700;
+          line-height: 45px;
+          color: $primary-text;
+          margin-bottom: 30px;
+        }
+      }
+      .password-input-container {
+        position: relative;
+        .eye-icon {
+          position: absolute;
+          cursor: pointer;
+          right: 40px;
+          top: 50%;
+          transform: translateY(-50%);
+          top: 25px;
+          img {
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.auth-detail-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 103%;
+  height: 100%;
+  border-radius: 0px 20px 20px 0px;
+  background: linear-gradient(
+    89.28deg,
+    $primary-gradient-start 5.99%,
+    $primary-gradient-end 94.17%
+  );
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  color: $white;
+  text-align: center;
+  gap: 20px;
+
+  .heading {
+    font-family: Roboto;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 45px;
+    color: $error-text;
+  }
+
+  .content {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 25px;
+    text-align: center;
+    padding: 20px;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .link {
+    width: 311px;
+    height: 37px;
+    padding: 16px;
+    gap: 12px;
+    border-radius: 62px;
+    background: $link-bg;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+      margin: 0;
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16.41px;
+    }
+
+    a {
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 16.41px;
+      letter-spacing: 1.5px;
+      text-decoration-line: underline;
+      color: $link-text;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $link-hover;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Media Queries
+@media (min-width: 768px) and (max-width: 1024px) {
+  .signup-wrapper {
+    padding: 20px;
+    .signup-card {
+      .form-section {
+        padding: 20px;
+        h2 {
+          text-align: center;
+        }
+      }
+    }
+    .details-section {
+      margin-bottom: 10px;
+    }
+  }
+  .auth-detail-wrapper {
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1366px) {
+  .signup-wrapper {
+    .details-section {
+      margin-bottom: 0px;
+    }
+    .signup-card {
+      .form-section {
+        h2 {
+          text-align: left;
+        }
+      }
+    }
+  }
+  .auth-detail-wrapper {
+    width: 103%;
+    border-radius: 0px 20px 20px 0px;
+  }
+}
