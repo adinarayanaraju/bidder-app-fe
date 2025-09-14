@@ -41,8 +41,10 @@ label {
 
   &:focus {
     outline: none;
-    border-color: rgb(16, 48, 187) !important;
-    box-shadow: 0 0 8px rgba(36, 90, 236, 0.4) !important;
+    // border-color: rgb(16, 48, 187) !important;]
+    border-color: #d7d3df !important;
+    // box-shadow: 0 0 8px rgba(36, 90, 236, 0.4) !important;
+    box-shadow: none !important;
     background-color: lighten($white, 2%) !important;
   }
 }

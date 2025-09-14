@@ -1,25 +1,39 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Button, FormGroup, Label } from "reactstrap";
+import { Button, FormGroup, Label, Spinner } from "reactstrap";
 import { signInSchema } from "../../utils/validationSchema";
 import "./auth.scss";
 import AuthDetails from "./AuthDetails";
 import eye from "../../assets/icons/eye.svg";
 import eyeHide from "../../assets/icons/eye_hide.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { signinUser } from "../../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
+import { routeConstants } from "../../utils/routeConstant";
 
 export default function Signin() {
   const [isPasswordView, setIsPasswordView] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.auth);
 
   const signupInitialValues = {
     email: "",
     password: "",
+    remember_password: false,
   };
 
-  const handleFromSubmit = (values, { resetForm }) => {
-    console.log("form values", values);
-    setTimeout(() => {
+  const handleFromSubmit = async (values, { resetForm }) => {
+    const payload = {
+      email: values.email,
+      password: values.password,
+      remember_password: values.remember_password,
+    };
+    try {
+      await dispatch(signinUser(payload)).unwrap();
       resetForm();
-    }, 4000);
+      navigate(routeConstants.HOME_PAGE);
+    } catch (error) {}
   };
 
   return (
@@ -87,12 +101,25 @@ export default function Signin() {
                   </div>
                 </FormGroup>
 
+                {/* Remember Password Checkbox */}
+                <FormGroup check>
+                  <Label check>
+                    <Field
+                      type="checkbox"
+                      name="remember_password"
+                      className="form-check-input custom-checkbox-input"
+                    />
+                    Remember Password
+                  </Label>
+                </FormGroup>
+
                 {/* Submit Button */}
                 <Button
                   type="submit"
                   className="btn btn-primary custom-button "
+                  disabled={isLoading}
                 >
-                  Submit
+                  {isLoading ? <Spinner /> : "Submit"}
                 </Button>
               </Form>
             )}

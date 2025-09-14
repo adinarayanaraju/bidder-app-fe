@@ -6,22 +6,38 @@ import Signup from "./views/auth/Signup";
 import Signin from "./views/auth/Signin";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ForgotPassword from "./views/auth/ForgotPassword";
+import VerifyAccount from "./views/auth/VerifyAccount";
+import ResetPassword from "./views/auth/ResetPassword";
+import { routeConstants } from "./utils/routeConstant";
+import Header from "./views/header/Header";
+import Home from "./views/home/Home";
+import AuctionDetails from "./views/auctionDetails/AuctionDetails";
 function App() {
-  const dispatch = useDispatch();
-  const { data, isLoading, error } = useSelector((state) => state.test);
-  console.log("data is", data);
-  useEffect(() => {
-    dispatch(fetchTestData());
-  }, []);
+
   return (
     <>
       <BrowserRouter>
+        <Header />
         <Routes>
-          <Route path="/auth/signup" element={<Signup />} />
-          <Route path="/auth/signin" element={<Signin />} />
-          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-
-
+          <Route path={routeConstants.HOME_PAGE} element={<Home />} />
+          <Route path={routeConstants.SIGN_UP} element={<Signup />} />
+          <Route path={routeConstants.SIGN_IN} element={<Signin />} />
+          <Route
+            path={routeConstants.FORGOT_PASSWORD}
+            element={<ForgotPassword />}
+          />
+          <Route
+            path={routeConstants.VERIFY_ACCOUNT}
+            element={<VerifyAccount />}
+          />
+          <Route
+            path={routeConstants.RESET_PASSWORD}
+            element={<ResetPassword />}
+          />
+          <Route
+            path={`${routeConstants.AUCTION_DETAIL}/:auction_id`}
+            element={<AuctionDetails />}
+          />
         </Routes>
       </BrowserRouter>
     </>
