@@ -16,6 +16,7 @@ import CreateAuction from "./views/createAuction/CreateAuction";
 import ProtectedRoute from "./ProtectedRoute";
 import AuctionList from "./views/auctionList/AuctionList";
 import UserProfile from "./views/userProfile/UserProfile";
+import UpdateAuction from "./views/createAuction/UpdateAuction";
 function App() {
   return (
     <>
@@ -47,7 +48,10 @@ function App() {
           />
 
           <Route path={routeConstants.USER_PROFILE} element={<UserProfile />} />
-
+          <Route
+            path={`${routeConstants.AUCTION_UPDATE}/:auction_id`}
+            element={<UpdateAuction />}
+          />
           {/* Protected routes */}
           <Route
             element={<ProtectedRoute allowedRoles={["admin", "super-admin"]} />}

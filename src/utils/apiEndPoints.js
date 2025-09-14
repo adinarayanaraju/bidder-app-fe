@@ -10,5 +10,7 @@ export const API_END_POINT = {
   GET_AUCTION_CATEGORY_LIST:"/auction-category",
   GET_PRESIGNED_URL:"/aws/get-presigned-url",
   CREATE_AUCTION:"/auction/create",
-  MY_AUCTION_LIST: "/auction/my-auction"
+  MY_AUCTION_LIST: "/auction/my-auction",
+  UPDATE_AUCTION:"/auction/update",
+  DELETE_AUCTION:"/auction/delete"
 };
